@@ -20,13 +20,13 @@ class ScorePressurePlate(PressurePlate):
 
         return messages
 
-class ExampleHouse(Map):
+class Colosseum(Map):
     def __init__(self) -> None:
         super().__init__(
-            name="Test House",
-            description="Welcome",
-            size=(15, 15),
-            entry_point=Coord(14, 7),
+            name="Colosseum",
+            description="Long Live The Three Emperors",
+            size=(30, 30),
+            entry_point=Coord(15, 0),
             background_tile_image='cobblestone',
         )
     
@@ -34,8 +34,8 @@ class ExampleHouse(Map):
         objects: list[tuple[MapObject, Coord]] = []
 
         # add a door
-        door = Door('int_entrance', linked_room="Trottier Town")
-        objects.append((door, Coord(14, 7)))
+        door = Door('int_entrance', linked_room="Maze")
+        objects.append((door, Coord(15, 0)))
 
         # add a pressure plate
         pressure_plate = ScorePressurePlate()
