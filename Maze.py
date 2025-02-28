@@ -8,11 +8,11 @@ if TYPE_CHECKING:
     from tiles.base import MapObject
     from tiles.map_objects import *
 
-class Colosseum(Map):
+class Maze(Map):
     def __init__(self) -> None:
         super().__init__(
-            name="Colosseum",
-            description="Long Live The Three Emperors",
+            name="Maze",
+            description="",
             size=(30, 30),
             entry_point=Coord(17, 14),
             background_tile_image='cobblestone',
@@ -29,4 +29,5 @@ class Colosseum(Map):
         pressure_plate = ScorePressurePlate()
         objects.append((pressure_plate, Coord(13, 7)))
 
+        # add a statue
         return objects
