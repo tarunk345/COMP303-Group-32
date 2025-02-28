@@ -8,18 +8,6 @@ if TYPE_CHECKING:
     from tiles.base import MapObject
     from tiles.map_objects import *
 
-class ScorePressurePlate(PressurePlate):
-    def __init__(self, image_name='pressure_plate'):
-        super().__init__(image_name)
-    
-    def player_entered(self, player) -> list[Message]:
-        messages = super().player_entered(player)
-
-        # add score to player
-        player.set_state("score", player.get_state("score") + 1)
-
-        return messages
-
 class Colosseum(Map):
     def __init__(self) -> None:
         super().__init__(
