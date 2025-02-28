@@ -26,7 +26,7 @@ class Colosseum(Map):
             name="Colosseum",
             description="Long Live The Three Emperors",
             size=(30, 30),
-            entry_point=Coord(15, 0),
+            entry_point=Coord(17, 14),
             background_tile_image='cobblestone',
         )
     
@@ -35,7 +35,7 @@ class Colosseum(Map):
 
         # add a door
         door = Door('int_entrance', linked_room="Maze")
-        objects.append((door, Coord(15, 0)))
+        objects.append((door, Coord(17, 45)))
 
         # add a pressure plate
         pressure_plate = ScorePressurePlate()
