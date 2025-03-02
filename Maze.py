@@ -13,7 +13,7 @@ class Maze(Map):
         super().__init__(
             name="Maze",
             description="",
-            size=(30, 30),
+            size=(73, 73),
             entry_point=Coord(17, 14),
             background_tile_image='cobblestone',
         )
@@ -24,10 +24,6 @@ class Maze(Map):
         # add a door
         door = Door('int_entrance', linked_room="Maze")
         objects.append((door, Coord(17, 45)))
-
-        # add a pressure plate
-        pressure_plate = ScorePressurePlate()
-        objects.append((pressure_plate, Coord(13, 7)))
 
         # add a statue
         return objects
