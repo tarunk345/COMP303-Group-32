@@ -1,21 +1,24 @@
-from maps.base import Map  # Ensure maps.base is accessible
-from coord import Coord
 from tiles.base import MapObject
+from coord import Coord
+from Room import Room 
 
-class Room(Map):
-    """A generic room that can contain objects and players."""
+class Door(MapObject):
+    #A door that connects rooms.
 
-    def __init__(self, name: str, size: tuple[int, int], entry_point: Coord, background_tile: str = "floor"):
-        """Initialize a new room."""
-        super().__init__(name=name, description="", size=size, entry_point=entry_point, background_tile_image=background_tile)
-        self.objects: list[tuple[MapObject, Coord]] = []
+    def __init__(self, image_name: str, linked_room: str = ""):
+        super().__init__(f'tile/door/{image_name}', passable=True, z_index=0)
+        self.__connected_room = None
+        self.__linked_room = linked_room
 
-    def add_object(self, obj: MapObject, position: Coord) -> None:
-        """Add an object to the room at a specific coordinate."""
-        self.objects.append((obj, position))
+    def connect_to(self, connected_room: Room, new_entry_point: Coord) -> None:
+        #Links this door to another room.
+        self.__connected_room = connected_room
+        self.__new_entry_point = new_entry_point
 
-    def get_objects(self) -> list[tuple[MapObject, Coord]]:
-        """Return all objects placed in the room."""
-        return self.objects
-    def go():
-        print("Hello")
+    def player_entered(self, player) -> list:
+        #Moves player to linked room if connected.
+        if self.__connected_room is None or self.__new_entry_point is None:
+            print("Door has no link")
+            return []
+
+        return player.change_room(self.__connected_room, entry_point=self.__new_entry_point)
