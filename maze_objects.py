@@ -36,4 +36,16 @@ class SaunaRoom(Room):
         return "warming and relaxing"
       else:
         return "lukewarm"
+
+    #add a taking damage method in here
+
+class StatueRoom(Room):
+    def __init__(self, image_name: str, passable: bool = True):
+        super().__init__(image_name, passable)
+
+    def player_entered(self, player: "HumanPlayer") -> list[Message]:
+        return [ServerMessage(player, f"You have entered the Sauna.")]
+
+class WineCellar(Room):
+    def __init__(self, image_name: str, passable: bool = True, 
       
