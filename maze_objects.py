@@ -44,8 +44,13 @@ class StatueRoom(Room):
         super().__init__(image_name, passable)
 
     def player_entered(self, player: "HumanPlayer") -> list[Message]:
-        return [ServerMessage(player, f"You have entered the Sauna.")]
+        return [ServerMessage(player, f"You have entered the Room of Statues.")]
 
 class WineCellar(Room):
-    def __init__(self, image_name: str, passable: bool = True, 
+    def __init__(self, image_name: str, passable: bool = True, potion: Potion):
+        super().__init__(image_name, passable)
+        self.potion = potion;
+
+    def player_entered(self, player: "HumanPlayer") -> list[Message]:
+        return [ServerMessage(player, f"You have entered the Wine Cellar.")]
       
