@@ -1,9 +1,9 @@
 from typing import Any, TYPE_CHECKING
 
-from ..message import *
-from ..coord import Coord
-from ..command import MenuCommand
-from ..tiles.base import MapObject, Exit, Observer
+from message import *
+from coord import Coord
+from command import MenuCommand
+from tiles.base import MapObject, Exit, Observer
 
 if TYPE_CHECKING:
     from NPC import NPC
