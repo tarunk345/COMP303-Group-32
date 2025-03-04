@@ -3,7 +3,7 @@ from typing import Any, TYPE_CHECKING
 from message import *
 from coord import Coord
 from command import MenuCommand
-from tiles.base import MapObject, Exit, Observer
+from tiles.base import MapObject, Exit, Observer, Tile
 
 if TYPE_CHECKING:
     from NPC import NPC
@@ -16,38 +16,46 @@ class Room(Map):
     def __init__(self, name: str, size: tuple[int, int], entry_point: Coord, background_tile: str = "floor"):
         #Constructor for new room
         super().__init__(name=name, description="", size=size, entry_point=entry_point, background_tile_image=background_tile)
-        self.objects: list[tuple[MapObject, Coord]] = []
+        self.__objects: list[tuple[MapObject, Coord]] = []
 
     def add_object(self, obj: MapObject, position: Coord) -> None:
         #Add a new object in the room
-        self.objects.append((obj, position))
+        self.__objects.append((obj, position))
 
     def get_objects(self) -> list[tuple[MapObject, Coord]]:
         #Return all objects in the room
-        return self.objects
+        return self.__objects
      
     @abstractmethod
     def player_entered(self, player: "HumanPlayer") -> list[Message]:
         return []
-    
-class Statue(MapObject):
-    #Statue
 
-    def __init__(self, image_name: str = "statue"):
-        #Constructor for new statue
-        super().__init__(f'tile/statue/{image_name}', passable=False)
 
-        
-class Corridor(Room):
+class Corridor(Map):
     #Creates a new corridor
 
     def __init__(self, name: str, length: int, entry_point: Coord):
         #Cunstroctor for new corridor
-        super().__init__(name=name, size=(1, length), entry_point=entry_point, background_tile="stone")
+        super().__init__(name=name, size=(1, length), entry_point=entry_point, description="",background_tile_image="stone")
+
+
+class Statue(MapObject):
+    #Statue
+    def __init__(self, description: str, image_name: str = "statue"):
+        #Constructor for new statue
+        super().__init__(f'tile/statue/{image_name}', passable=False)
+        self.__description = description
+
+    def player_interacted(self, player: HumanPlayer):
+        return [ServerMessage(player, self.__description)]
+
+class Wall(MapObject):
+    def __init__(self, image_name: str = "wall", passable: bool = False, ):
+        super().__init__(image_name=image_name,passable=passable, z_index=1)
+
 
 class Door(MapObject):
     #A door that connects rooms.
-
     def __init__(self, image_name: str, linked_room: str = ""):
         super().__init__(f'tile/door/{image_name}', passable=True, z_index=0)
         self.__connected_room = None
@@ -70,17 +78,17 @@ class Door(MapObject):
 class SaunaRoom(Room):
     def __init__(self, heat_level: int, name: str, size: tuple[int, int], entry_point: Coord, background_tile: str = "floor"):
         super().__init__(name=name, size=size, entry_point=entry_point, background_tile=background_tile)
-        self.heat_level = heat_level
+        self.__heat_level = heat_level
 
     def player_entered(self, player: "HumanPlayer") -> list[Message]:
         return [ServerMessage(player, f"You have entered the Sauna.")]
 
     def change_heat_intensity(self, heat: int) -> str:
-      self.heat_level += heat;
-      self.heat_level = max(0, min(self.heat_level, 10))
-      if self.heat_level > 8:
+      self.__heat_level += heat;
+      self.__heat_level = max(0, min(self.__heat_level, 10))
+      if self.__heat_level > 8:
         return "scorching hot"
-      elif self.heat_level > 5:
+      elif self.__heat_level > 5:
         return "warming and relaxing"
       else:
         return "lukewarm"
@@ -100,4 +108,3 @@ class WineCellar(Room):
 
     def player_entered(self, player: "HumanPlayer") -> list[Message]:
         return [ServerMessage(player, f"You have entered the Wine Cellar.")]
-      
