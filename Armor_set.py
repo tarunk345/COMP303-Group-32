@@ -7,12 +7,18 @@ class Armor_Set(Defense):
         self.list_armors : list[Defense] = []
         
 
-    def get_defence_value(self) -> int:
+    def get_defense_value(self) -> int:
         for armor in self.list_armors:
-            defense = defense + armor.get_defence_value()
+            defense = defense + armor.get_defense_value()
         
         return defense
 
 
+    def decrease_defense(self,attack:int)->int:
+        
+        for armor in self.list_armors:
+            attack = armor.decrease_defense(attack)
+        
+        return attack
 
 

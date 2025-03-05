@@ -16,12 +16,22 @@ class player(HumanPlayer,Defense):
         self.defense: int  = defense
         self.armor_set :Armor_Set = Armor_Set()
 
-    def get_defence_value(self)->int:
+    def get_defense_value(self)->int:
         defense : int = self.defense
-        defense= defense + self.armor_set.get_defence_value()
+        defense= defense + self.armor_set.get_defense_value()
         return defense
 
 
+    def decrease_defense(self , attack:int)->int:
+        attack = self.armor_set.decrease_defense(attack)
+        if attack>= self.get_defense_value():
+            self.defense = self.defense -attack
+            return 0
+
+        attack = attack - self.defense
+        self.defense = 0
+        return attack
+        
 
 
 
