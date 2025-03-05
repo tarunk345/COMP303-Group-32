@@ -6,11 +6,12 @@ from tiles.base import MapObject
 from tiles.map_objects import *
 from Armor_set import Armor_Set
 from Defense import Defense
+from Armors import *
 
 
     
 
-class player(HumanPlayer,Defense):
+class maze_player(HumanPlayer,Defense):
     def __init__(self,defense : int, attack_damage: int, name: str, websocket_state: Any = None, email: str = "", image: str = 'player1', facing_direction: Literal['up'] | Literal['down'] | Literal['left'] | Literal['right'] = 'down', passable: bool = True) -> None:
         super().__init__(name, websocket_state, email, image, facing_direction, passable)
         self.defense: int  = defense
@@ -31,6 +32,11 @@ class player(HumanPlayer,Defense):
         attack = attack - self.defense
         self.defense = 0
         return attack
+    
+    def add_armor(self , armor : Armor):
+        self.armor_set.list_armors.append(armor)
+
+        
         
 
 

@@ -20,5 +20,10 @@ class Armor_Set(Defense):
             attack = armor.decrease_defense(attack)
         
         return attack
+    
+
+    # def toString(self)->String:
+
+
 
 
