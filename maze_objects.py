@@ -1,5 +1,4 @@
 from typing import Any, TYPE_CHECKING
-
 from message import *
 from coord import Coord
 from command import MenuCommand
