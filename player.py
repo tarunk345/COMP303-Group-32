@@ -15,13 +15,12 @@ class maze_player(HumanPlayer,Defense):
     def __init__(self,defense : int, attack_damage: int, name: str, websocket_state: Any = None, email: str = "", image: str = 'player1', facing_direction: Literal['up'] | Literal['down'] | Literal['left'] | Literal['right'] = 'down', passable: bool = True) -> None:
         super().__init__(name, websocket_state, email, image, facing_direction, passable)
         self.defense: int  = defense
-        self.armor_set :Armor_Set = Armor_Set()
+        self.armor_set : Armor_Set = Armor_Set()
 
     def get_defense_value(self)->int:
         defense : int = self.defense
         defense= defense + self.armor_set.get_defense_value()
         return defense
-
 
     def decrease_defense(self , attack:int)->int:
         attack = self.armor_set.decrease_defense(attack)
@@ -34,7 +33,7 @@ class maze_player(HumanPlayer,Defense):
         return attack
     
     def add_armor(self , armor : Armor):
-        self.armor_set.list_armors.append(armor)
+        self.armor_set.__list_armors.append(armor)
 
         
         

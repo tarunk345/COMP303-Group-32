@@ -4,19 +4,25 @@ from Armors import *
 class Armor_Set(Defense):
     def __init__(self) -> None:
         super().__init__()
-        self.list_armors : list[Defense] = []
+        self.__list_armors : list[Armor] = []
         
 
     def get_defense_value(self) -> int:
-        for armor in self.list_armors:
-            defense = defense + armor.get_defense_value()
+        defense = 0
+        for armor in self.__list_armors:
+            defense += armor.get_defense_value()
         
         return defense
 
+    def __str__(self) -> str:
+        str = ''
+        for armor in self.__list_armors:
+            str.__add__(armor.get_name() + ',')
+        return str
 
     def decrease_defense(self,attack:int)->int:
         
-        for armor in self.list_armors:
+        for armor in self.__list_armors:
             attack = armor.decrease_defense(attack)
         
         return attack
