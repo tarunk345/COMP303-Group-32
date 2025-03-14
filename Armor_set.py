@@ -1,6 +1,8 @@
 from Defense import Defense
 from Armors import *
 from typing import Optional
+from Potions import *
+import random
 
 class Armor_Set(Defense):
     def __init__(self) -> None:
@@ -45,6 +47,17 @@ class Armor_Set(Defense):
                     return armor
                 
         
+        return None
+    
+    def add_potion(self, potion : Potion)->Optional[Potion]  :
+        if len(self.__list_armors) == 0:
+            return potion
+        
+        armor = random.choice(self.__list_armors)
+        potion.set_armor(armor)
+        self.__list_armors.remove(armor)
+        self.__list_armors.append(potion)
+    
         return None
 
 

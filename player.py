@@ -8,7 +8,7 @@ from tiles.map_objects import *
 from Armor_set import Armor_Set
 from Defense import Defense
 from Armors import *
-
+from Potions import *
 
 
     
@@ -35,8 +35,12 @@ class maze_player(HumanPlayer,Defense):
         self.__defense = 0
         return 1
     
-    def check_armor_player(self , armor : Armor)->Optional[Armor]:
+    def check_armor_player(self, armor : Armor)->Optional[Armor]:
         return self.__armor_set.add_armor(armor)
+    
+
+    def check_potion_player(self, potion: Potion):
+        return self.__armor_set.add_potion(potion)
 
         
         

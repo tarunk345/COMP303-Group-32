@@ -25,7 +25,7 @@ class Armor(Defense, MapObject):
         return self.__name
 
     def get_defense_value(self) -> int:
-        return self.__armor_value
+        return self.__defense_value
     
     def player_entered(self, player: maze_player) -> list[Message]:
         self.__maze.remove_from_grid(self , self._position)
@@ -43,11 +43,11 @@ class Armor(Defense, MapObject):
 
 
     def decrease_defense(self,attack:int)->int:
-            if attack>= self.__armor_value:
-                self.__armor_value = self.__armor_value - attack
+            if attack < self.__defense_value:
+                self.__defense_value = self.__defense_value - attack
                 return 0
-            attack = attack - self.__armor_value
-            self.__armor_value = 0
+            attack = attack - self.__defense_value
+            self.__defense_value = 0
             return attack
 
 
