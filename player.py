@@ -14,26 +14,26 @@ from Armors import *
     
 
 class maze_player(HumanPlayer,Defense):
-    def __init__(self,defense : int, attack_damage: int, name: str, websocket_state: Any = None, email: str = "", image: str = 'player1', facing_direction: Literal['up'] | Literal['down'] | Literal['left'] | Literal['right'] = 'down', passable: bool = True) -> None:
+    def __init__(self,defense : int, attack_damage: int, 
+                 name: str, websocket_state: Any = None, email: str = "", 
+                 image: str = 'player1', facing_direction: Literal['up', 'down', 'left', 'right'] = 'down', passable: bool = True) -> None:
         super().__init__(name, websocket_state, email, image, facing_direction, passable)
         self.__defense: int  = defense
+        self.__attack_damage = attack_damage
         self.__armor_set: Armor_Set = Armor_Set()
 
     def get_defense_value(self)->int:
-        defense : int = self.defense
-        defense= defense + self.__armor_set.get_defense_value()
-        return defense
+        return self.__defense
 
 
     def decrease_defense(self , attack:int)->int:
         attack = self.__armor_set.decrease_defense(attack)
-        if attack>= self.get_defense_value():
-            self.defense = self.defense -attack
+        if attack < self.__defense:
+            self.defense = self.defense - attack
             return 0
 
-        attack = attack - self.defense
-        self.defense = 0
-        return attack
+        self.__defense = 0
+        return 1
     
     def check_armor_player(self , armor : Armor)->Optional[Armor]:
         return self.__armor_set.add_armor(armor)
