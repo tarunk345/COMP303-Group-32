@@ -11,7 +11,7 @@ class Armor_Set(Defense):
     def get_defense_value(self) -> int:
         defense = 0
         for armor in self.__list_armors:
-            defense = defense + armor.get_defense_value()
+            defense += armor.get_defense_value()
         
         return defense
 
