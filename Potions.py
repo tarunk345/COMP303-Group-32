@@ -1,6 +1,7 @@
 from Defense import Defense
 from Armors import *
 from typing import Optional
+from tiles.base import MapObject
 
 
 class Potion(Defense, MapObject):
@@ -23,10 +24,13 @@ class Potion(Defense, MapObject):
     def get_defense_value(self) -> int:
         return self.__defense_value
     
-    def set_armor(self, armor: Defense):
-        self.__defense_value = self.__defense_multiplier * self.__armor.get_defense_value()
-        self.__armor = armor
     
+    def set_armor(self, armor: Defense):
+        self.__armor = armor
+        self.__defense_value = self.__defense_multiplier * self.__armor.get_defense_value()
+        self.__name = str(self.__armor)
+        if(isinstance(self.__armor,(Armor,Potion))):
+            self.set_image_name(self.__armor.get_image_name())
 
     
     def player_entered(self, player: maze_player) -> list[Message]:

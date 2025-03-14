@@ -35,7 +35,7 @@ class maze_player(HumanPlayer,Defense):
         self.__defense = 0
         return 1
     
-    def check_armor_player(self, armor : Armor)->Optional[Armor]:
+    def check_armor_player(self, armor : Armor)->Optional[Defense]:
         return self.__armor_set.add_armor(armor)
     
 

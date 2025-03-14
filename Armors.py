@@ -1,11 +1,9 @@
 from Defense import Defense
-from Player import HumanPlayer
-from message import Message
-from tiles.map_objects import PressurePlate 
 from player import maze_player
 from Maze import Maze
 from tiles.base import MapObject
 from message import *
+from Potions import Potion
 
 
 
@@ -35,10 +33,11 @@ class Armor(Defense, MapObject):
         elif armor == self :
             self.__maze.add_to_grid(self,self.get_position())
             return [DialogueMessage(self, player, self.__not_pick_text,self.__name)]
-        else: 
-            armor.set_position(self.get_position())
-            self.__maze.add_to_grid(armor,armor.get_position())
-            defense_changed: int = self.__defense_value - armor.__defense_value
+        else:
+            if(isinstance(armor,(Armor,Potion))): 
+                armor.set_position(self.get_position())
+                self.__maze.add_to_grid(armor,armor.get_position())
+                defense_changed: int = self.__defense_value - armor.__defense_value
             return [DialogueMessage(self, player, self.__change_text + str(defense_changed),self.__name)]
 
 

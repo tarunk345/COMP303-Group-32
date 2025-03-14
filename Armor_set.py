@@ -32,13 +32,12 @@ class Armor_Set(Defense):
         return string
     
     
-    def add_armor(self, armor : Armor)->Optional[Armor]  :
+    def add_armor(self, armor : Armor)->Optional[Defense]  :
 
         for check_armor in self.__list_armors:
 
 
-            if isinstance(check_armor, armor.__class__):
-
+            if str(check_armor)==str(armor):
                 if check_armor.get_defense_value()<armor.get_defense_value():
                     self.__list_armors.remove(check_armor)
                     self.__list_armors.append(armor)
