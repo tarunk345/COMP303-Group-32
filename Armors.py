@@ -10,27 +10,37 @@ from message import *
 
 
 class Armor(Defense, MapObject):
-    def __init__(self,player :maze_player, maze: Maze,
-                 armor_value:int, image_name: str, 
-                 passable: bool = True, z_index: int = 0) -> None:
+    def __init__(self, name :str, defense_value:int, 
+                 player :maze_player, maze: Maze, image_name: str, passable: bool = True, z_index: int = 0) -> None:
         super().__init__(image_name, passable, z_index)
-        self.__armor_value:int = armor_value;
-        self.pick_text='You picked up the Armor! Defense increased by:'
+        self.__name: str = name
+        self.__defense_value:int = defense_value
+        self.__pick_text : str ='You picked up the '+ name +'! Defense increased by: ' + str(defense_value)
+        self.__change_text :  str  = name + 'changed! Defense increased by:'
+        self.__not_pick_text : str = 'current' + name + 'has more defense!'
         self.__player :maze_player = player
-        self.__maze: Maze = maze
+        self.__maze:Maze = maze
     
-
     def __str__(self)->str:
-        return "Armor"
+        return self.__name
 
     def get_defense_value(self) -> int:
         return self.__armor_value
     
-
     def player_entered(self, player: maze_player) -> list[Message]:
-        player.add_armor(self)
         self.__maze.remove_from_grid(self , self._position)
-        return [DialogueMessage(self, player, self.pick_text + str(self.__armor_value), 'Armor')]
+        armor = player.check_armor_player(self)
+        if armor is None:
+            return [DialogueMessage(self, player, self.__pick_text,self.__name)]
+        elif armor == self :
+            self.__maze.add_to_grid(self,self.get_position())
+            return [DialogueMessage(self, player, self.__not_pick_text,self.__name)]
+        else: 
+            armor.set_position(self.get_position())
+            self.__maze.add_to_grid(armor,armor.get_position())
+            defense_changed: int = self.__defense_value - armor.__defense_value
+            return [DialogueMessage(self, player, self.__change_text + str(defense_changed),self.__name)]
+
 
     def decrease_defense(self,attack:int)->int:
             if attack>= self.__armor_value:
@@ -44,62 +54,25 @@ class Armor(Defense, MapObject):
 
 class Pants(Armor):
 
-    def __init__(self, player: maze_player, maze: Maze, image_name: str = 'Pants', passable: bool = True, z_index: int = 0) -> None:
-        super().__init__(player, maze, 7,image_name, passable, z_index)
-        self.pick_text='You picked up the Pants! Defense increased by : 7! '
-
-
-    def player_entered(self, player: maze_player) -> list[Message]:
-        super().player_entered(player)
-
-        return [DialogueMessage(self, player, self.pick_text,'Pants')]
-
-    
-    def __str__(self)->str:
-        return 'Pants'
+    def __init__(self, name: str, defense_value: int, player: maze_player, maze: Maze, image_name: str, passable: bool = True, z_index: int = 0) -> None:
+        super().__init__(name, defense_value, player, maze, image_name, passable, z_index)
 
 
 
 class Chest_Plate(Armor):
 
-    def __init__(self, player: maze_player, maze: Maze, image_name: str, passable: bool = True, z_index: int = 0) -> None:
-        super().__init__(player, maze, 7, image_name, passable, z_index)
-        self.pick_text='You picked up the Chest Plate! Defense increased by : 7! '
-
-
-    def player_entered(self, player: maze_player) -> list[Message]:
-        super().player_entered(player)
-
-        return [DialogueMessage(self, player, self.pick_text,'Chest Plate')]
-
-    def __str__(self)->str:
-        return 'Chest Plate'
+    def __init__(self, name: str, defense_value: int, player: maze_player, maze: Maze, image_name: str, passable: bool = True, z_index: int = 0) -> None:
+        super().__init__(name, defense_value, player, maze, image_name, passable, z_index)
     
 
 
 class Helmet(Armor):
 
-    def __init__(self, player: maze_player, maze: Maze, image_name: str, passable: bool = True, z_index: int = 0) -> None:
-        super().__init__(player, maze, 10, image_name, passable, z_index)
-        self.pick_text='You picked up the Helmet! Defense increased by : 10! '
-    def player_entered(self, player: maze_player) -> list[Message]:
-        super().player_entered(player)
-        return [DialogueMessage(self, player, self.pick_text,'Helmet')]
-
-    def __str__(self)->str:
-        return 'Helmet'
-
+    def __init__(self, name: str, defense_value: int, player: maze_player, maze: Maze, image_name: str, passable: bool = True, z_index: int = 0) -> None:
+        super().__init__(name, defense_value, player, maze, image_name, passable, z_index)
 
 
 class Boots(Armor):
 
-    def __init__(self, player: maze_player, maze: Maze, image_name: str, passable: bool = True, z_index: int = 0) -> None:
-        super().__init__(player, maze, 5, image_name, passable, z_index)
-        self.pick_text='You picked up the Boots! Defense increased by : 5! '
-
-    def player_entered(self, player: maze_player) -> list[Message]:
-        super().player_entered(player)
-        return [DialogueMessage(self, player, self.pick_text,'Boots')]
-
-    def __str__(self)->str:
-        return 'Boots'
+    def __init__(self, name: str, defense_value: int, player: maze_player, maze: Maze, image_name: str, passable: bool = True, z_index: int = 0) -> None:
+        super().__init__(name, defense_value, player, maze, image_name, passable, z_index)

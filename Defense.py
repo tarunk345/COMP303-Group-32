@@ -10,3 +10,6 @@ class Defense(ABC):
     @abstractmethod
     def decrease_defense(self,attack:int)->int:
         pass
+
+
+
