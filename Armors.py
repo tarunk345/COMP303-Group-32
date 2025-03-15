@@ -35,14 +35,17 @@ class Armor(Defense, MapObject):
         return self.__defense_type
     
     def player_entered(self, player: maze_player) -> list[Message]:
+        """if armor added then update attack value of player and return pick text
+            if armor not added put the the armor back on grid and return not pick text
+            if armor changed then put the old armor back on grid,update attack value of player and return change text"""
         self.__maze.remove_from_grid(self , self._position)
         armor = player.check_armor_player(self)
         if armor is None:
             self.__player.update_attack_value()
-            return [DialogueMessage(self, player, self.__pick_text,self.__name)]
+            return [DialogueMessage(self, player, self.__pick_text,self.get_image_name())]
         elif armor == self :
             self.__maze.add_to_grid(self,self.get_position())
-            return [DialogueMessage(self, player, self.__not_pick_text,self.__name)]
+            return [DialogueMessage(self, player, self.__not_pick_text,self.get_image_name())]
         else:
             if(isinstance(armor,(Armor,Potion))): 
                 armor.set_position(self.get_position())
@@ -50,10 +53,20 @@ class Armor(Defense, MapObject):
                 defense_changed: int = self.__defense_value - armor.__defense_value
                 attack_changed:int = self.__attack_value - armor.__attack_value
                 self.__player.update_attack_value()
-            return [DialogueMessage(self, player, self.__change_text + str(defense_changed),self.__name)]
+                if defense_changed>=0 and attack_changed>=0:
+                    self.__change_text = self.__change_text+'increased by' + str(defense_changed)+'\n' + 'attack increased by' + str(attack_changed)+'!'
+                elif defense_changed<0 and attack_changed>=0:
+                    self.__change_text = self.__change_text+'decreased by' + str(defense_changed)+'\n' + 'attack increased by' + str(attack_changed)+'!'
+                else:
+                    self.__change_text = self.__change_text+'increased by' + str(defense_changed)+'\n' + 'attack decreased by' + str(attack_changed)+'!'
+
+
+
+            return [DialogueMessage(self, player, self.__change_text + str(defense_changed),self.get_image_name())]
 
 
     def decrease_defense(self,attack:int)->int:
+            """if attack>defense value then remaining attack is returned"""
             if attack < self.__defense_value:
                 self.__defense_value = self.__defense_value - attack
                 return 0 

@@ -28,6 +28,7 @@ class Armor_Set(Defense):
 
 
     def decrease_defense(self,attack:int)->int:
+        """remainging attack is returned"""
         
         for armor in self.__list_armors:
             attack = armor.decrease_defense(attack)
@@ -42,6 +43,9 @@ class Armor_Set(Defense):
     
     
     def add_armor(self, armor : Armor)->Optional[Defense]  :
+        """return None if armor added
+            return old armor if armor is changes
+            return new armor if armor is not added"""
         armor_stats = armor.get_defense_value() + armor.get_attack_value()
 
         for check_armor in self.__list_armors:
@@ -59,6 +63,10 @@ class Armor_Set(Defense):
         return None
     
     def add_potion(self, potion : Potion)->Optional[Potion]  :
+        """return None if potion added
+            return new potion if potion is not added"""
+        """potion can be applied on armors which already has potion applied to them"""
+
         if len(self.__list_armors) == 0:
             return potion
         

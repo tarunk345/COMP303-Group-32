@@ -15,6 +15,7 @@ class Potion(Defense, MapObject):
         self.__name: str = name
         self.__multiplier:int = multiplier
         self.__defense_type:Defense_type = defense_type
+        self.__armor:Defense
         self.__defense_value:int
         self.__attack_value:int
         self.__pick_text : str ='You picked up the '+ name +'! It is applied to '
@@ -42,7 +43,7 @@ class Potion(Defense, MapObject):
     def get_multiplier(self):
         return self.__multiplier
     
-    def get_armor(self):
+    def get_armor(self)->Defense:
         return self.__armor
     
     def get_defense_type(self) -> Defense_type:
@@ -65,6 +66,8 @@ class Potion(Defense, MapObject):
 
 
     def player_entered(self, player: maze_player) -> list[Message]:
+        """if potion not added put the the potion back on grid and return pick text
+            if potion added then update attack value of player,update the fields of potion and return not pick text"""
 
         self.__maze.remove_from_grid(self , self._position)
         potion = player.check_potion_player(self)

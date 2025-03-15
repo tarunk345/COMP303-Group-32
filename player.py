@@ -31,6 +31,13 @@ class maze_player(HumanPlayer,Defense):
 
 
     def decrease_defense(self , attack:int)->int:
+        """first attack is applied on armor set then 
+            if still some attack damage is left then it is applied on player"""
+        
+        """defense value is not updated because when the enemy attack player 
+            the defense value can be subtracted from each armor individually 
+            and if defense value of one armor is less than it can changed with an armor of same type"""
+        
         attack = self.__armor_set.decrease_defense(attack)
         if attack < self.__defense:
             self.defense = self.defense - attack
@@ -40,13 +47,18 @@ class maze_player(HumanPlayer,Defense):
         return 1
     
     def check_armor_player(self, armor : Armor)->Optional[Defense]:
+        """return None if armor added
+            return old armor if armor is changes
+            return new armor if armor is not added"""        
         return self.__armor_set.add_armor(armor)
     
 
     def check_potion_player(self, potion: Potion):
+        """return None if potion added
+            return new potion if potion is not added"""
         return self.__armor_set.add_potion(potion)
 
         
-        
     def update_attack_value(self):
+        """needed an attack_value_without_armor to update the attack value"""
         self.__attack_value = self.__armor_set.get_attack_value()+self.__attack_value_without_armor
