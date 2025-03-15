@@ -14,8 +14,6 @@ class Defense_type(Enum):
 
 class Defense(ABC):
 
-
-
     @abstractmethod
     def get_defense_value(self)-> int:
         pass

@@ -51,10 +51,13 @@ class Potion(Defense, MapObject):
     def update_player_attack(self):
         self.__player.update_attack_value()
 
+    def get_pick_text(self) -> str:
+        return self.__pick_text
     
-
-    def set_armor(self, armor: Defense):
+    def set_armor_defence_attack(self, armor: Defense):
         self.__armor = armor
+
+    def set_fields(self):
         self.__name = str(self.__armor)
         if(isinstance(self.__armor,(Armor,Potion))):
             self.set_image_name(self.__armor.get_image_name())
@@ -83,8 +86,9 @@ class Defense_potion(Potion):
          
 
 
-    def set_armor(self, armor: Defense):
-        super().set_armor(armor)
+    def set_armor_defence_attack(self, armor: Defense):
+        super().set_armor_defence_attack(armor)
+        self.set_attack_value(armor.get_attack_value())
         self.set_defense_value(self.get_multiplier()*armor.get_defense_value())
 
 
@@ -94,10 +98,13 @@ class Defense_potion(Potion):
             return message
         
         armor = self.get_armor()
+        image_name = self.get_image_name()
+        
+        
         defense_increase = self.get_defense_value() - armor.get_defense_value()
         self.__pick_text = self.__pick_text + str(armor)+ '.\nDefense increased by ' + str(defense_increase)+'!' 
         self.update_player_attack()
-        return [DialogueMessage(self, player, self.__pick_text, self.__name)]
+        return [DialogueMessage(self, player, self.__pick_text, image_name)]
 
 
 
@@ -110,8 +117,9 @@ class Attack_potion(Potion):
         super().__init__(name, multiplier, Defense_type.ATTACK_POTION, player, maze, image_name, passable, z_index)
 
 
-    def set_armor(self, armor: Defense):
-        super().set_armor(armor)
+    def set_armor_defence_attack(self, armor: Defense):
+        super().set_armor_defence_attack(armor)
+        self.set_defense_value(armor.get_defense_value())
         self.set_attack_value(self.get_multiplier()*armor.get_attack_value())
 
     def player_entered(self, player: maze_player) -> list[Message]:
@@ -120,10 +128,12 @@ class Attack_potion(Potion):
             return message
         
         armor = self.get_armor()
+        image_name = self.get_image_name()
+        self.set_fields()
         attack_increase = self.get_attack_value() - armor.get_attack_value()
         self.__pick_text = self.__pick_text + str(armor)+ '.\nAttack increased by ' + str(attack_increase)+'!' 
         self.update_player_attack()
-        return [DialogueMessage(self, player, self.__pick_text, self.__name)]
+        return [DialogueMessage(self, player, self.__pick_text, image_name)]
 
 
 

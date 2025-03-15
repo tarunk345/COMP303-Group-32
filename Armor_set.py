@@ -63,7 +63,7 @@ class Armor_Set(Defense):
             return potion
         
         armor = random.choice(self.__list_armors)
-        potion.set_armor(armor)
+        potion.set_armor_defence_attack(armor)
         self.__list_armors.remove(armor)
         self.__list_armors.append(potion)
     
