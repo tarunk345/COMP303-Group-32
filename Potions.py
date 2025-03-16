@@ -63,6 +63,15 @@ class Potion(Defense, MapObject):
         if(isinstance(self.__armor,(Armor,Potion))):
             self.set_image_name(self.__armor.get_image_name())
             self.__defense_type = self.__armor.get_defense_type()
+            
+
+    def decrease_defense(self, attack: int) -> int:
+        if attack < self.__defense_value:
+                self.__defense_value = self.__defense_value - attack
+                return 0 
+        attack = attack - self.__defense_value
+        self.__defense_value = 0
+        return attack
 
 
     def player_entered(self, player: maze_player) -> list[Message]:
