@@ -1,6 +1,6 @@
 import pytest
-from COMP303_Group_32.maze_objects import Room, Corridor, Statue
-from COMP303_Group_32.coord import Coord
+from COMP303_Group_32.maze_objects import *
+from coord import Coord
 from tiles.base import MapObject
 from Player import HumanPlayer
 
@@ -20,7 +20,7 @@ def test_room_add_and_get_objects():
 
 def test_corridor_initialization():
     corridor = Corridor("TestCorridor", length=10, entry_point=Coord(0, 0))
-    assert corridor._size == (1, 10)  # Access internal size directly
+    assert corridor._size == (1, 10)  # Not a problem
 
 def test_statue_interaction():
     statue = Statue(description="You see a grand statue.")
