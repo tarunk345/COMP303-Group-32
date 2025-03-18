@@ -7,6 +7,8 @@ if TYPE_CHECKING:
     from maps.base import Map
     from tiles.base import MapObject
     from tiles.map_objects import *
+    from PIL import Image
+    from maze_objects import *
 
 class Maze(Map):
     def __init__(self) -> None:
@@ -22,8 +24,20 @@ class Maze(Map):
         objects: list[tuple[MapObject, Coord]] = []
 
         # add a door
-        door = Door('int_entrance', linked_room="Maze")
-        objects.append((door, Coord(17, 45)))
+        door = Door('int_entrance', linked_room="Trottier Town")
+        objects.append((door, Coord(63,0)))
+
+        door2 = Door('int_entrace', linked_room="Trottier Town")
+        objects.append((door2,Coord(23,72)))
 
         # add a statue
         return objects
+    
+    def create_maze_base(self):
+        image = Image.open(get_resource_path("maze_template", ext_folder=True))
+        
+        for y in range(73):
+            for x in range(73):
+                pixel = image.getpixel((x,y))
+                if pixel == (0,0,0):
+                    self.add_to_grid(Wall(),Coord(x,y))
