@@ -1,11 +1,10 @@
-from typing import Any, TYPE_CHECKING
-
-from message import *
-from coord import Coord
-from command import MenuCommand
-from tiles.base import MapObject, Exit, Observer, Tile
-
+from typing import TYPE_CHECKING
+from .imports import * 
 if TYPE_CHECKING:
+    from message import *
+    from coord import Coord
+    from command import MenuCommand
+    from tiles.base import MapObject, Exit, Observer, Tile
     from NPC import NPC
     from maps.base import Map
 
@@ -13,31 +12,30 @@ if TYPE_CHECKING:
 class Room(Map): 
     #A generic room that can contain objects and players
 
-    def __init__(self, name: str, size: tuple[int, int], entry_point: Coord, background_tile: str = "floor"):
+    def __init__(self, name: str = "DefaultRoom", size: tuple[int, int] = (10,10), entry_point: Coord = Coord(0,0), background_tile: str = "cobblestone"):
         #Constructor for new room
         super().__init__(name=name, description="", size=size, entry_point=entry_point, background_tile_image=background_tile)
-        self.__objects: list[tuple[MapObject, Coord]] = []
+        self._objects: list[tuple[MapObject, Coord]] = []
 
     def add_object(self, obj: MapObject, position: Coord) -> None:
         #Add a new object in the room
-        self.__objects.append((obj, position))
+        self._objects.append((obj, position))
 
     def get_objects(self) -> list[tuple[MapObject, Coord]]:
         #Return all objects in the room
-        return self.__objects
+        return self._objects
      
-    @abstractmethod
-    def player_entered(self, player: "HumanPlayer") -> list[Message]:
-        return []
+    def player_entered(self, player: "HumanPlayer"):
+        pass
 
 
-class Corridor(Map):
+##class Corridor(Map):
     #Creates a new corridor
 
-    def __init__(self, name: str, length: int, entry_point: Coord):
+##    def __init__(self, name: str,description: str, length: int, entry_point: Coord):
         #Cunstroctor for new corridor
-        super().__init__(name=name, size=(1, length), entry_point=entry_point, description="",background_tile_image="stone")
-
+ ##       super().__init__(name=name,description=description, size=(1, length), entry_point=entry_point,background_tile_image="cobblestone")
+ ##       self.length=length
 
 class Statue(MapObject):
     #Statue
@@ -50,9 +48,12 @@ class Statue(MapObject):
         return [ServerMessage(player, self.__description)]
 
 class Wall(MapObject):
-    def __init__(self, image_name: str = "wall", passable: bool = False, ):
+    def __init__(self, image_name: str = "wall", passable: bool = False):
         super().__init__(image_name=image_name,passable=passable, z_index=1)
 
+class Floor(MapObject):
+    def __init__(self, image_name: str = "cobblestone", passable: bool = True):
+        super().__init__(image_name=image_name,passable=passable,z_index=0)
 
 class Door(MapObject):
     #A door that connects rooms.
