@@ -1,4 +1,4 @@
-from .Defense import Defense_type
+from Defense import Defense_type
 from Defense import *
 from player import maze_player
 from Maze import Maze

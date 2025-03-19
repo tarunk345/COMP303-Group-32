@@ -1,4 +1,5 @@
 from typing import Any, TYPE_CHECKING
+
 from message import *
 from coord import Coord
 from command import MenuCommand
@@ -83,7 +84,7 @@ class SaunaRoom(Room):
         return [ServerMessage(player, f"You have entered the Sauna.")]
 
     def change_heat_intensity(self, heat: int) -> str:
-      self.__heat_level += heat;
+      self.__heat_level += heat
       self.__heat_level = max(0, min(self.__heat_level, 10))
       if self.__heat_level > 8:
         return "scorching hot"

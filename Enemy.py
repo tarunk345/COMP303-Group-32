@@ -7,7 +7,7 @@ from message import HumanPlayer, Message
 from tiles.base import MapObject
 from tiles.map_objects import *
 from Defense import Defense
-from player import maze_player
+from .player import maze_player
 from Maze import Maze
 
 
