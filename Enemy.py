@@ -1,14 +1,16 @@
-from typing import List
+from typing import List, TYPE_CHECKING, Literal
+from .Defense import Defense
+from .player import maze_player
+from .Maze import Maze
+from .imports import * 
+if TYPE_CHECKING:
+    from Player import HumanPlayer
+    from coord import Coord
+    from maps.base import Map
+    from message import HumanPlayer, Message
+    from tiles.base import MapObject
+    from tiles.map_objects import *
 
-from Player import HumanPlayer
-from coord import Coord
-from maps.base import Map
-from message import HumanPlayer, Message
-from tiles.base import MapObject
-from tiles.map_objects import *
-from Defense import Defense
-from player import maze_player
-from Maze import Maze
 
 
 class Enemy(NPC, Defense, MapObject):

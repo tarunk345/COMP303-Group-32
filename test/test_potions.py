@@ -1,9 +1,9 @@
 import pytest
-from COMP303_Group_32.Potions import Potion
-from COMP303_Group_32.Maze import Maze
-from COMP303_Group_32.player import maze_player
-from COMP303_Group_32.Armors import *
-from COMP303_Group_32.Armor_set import Armor_Set
+from ..Potions import Potion
+from ..Maze import Maze
+from ..player import maze_player
+from ..Armors import *
+from ..Armor_set import Armor_Set
 
 @pytest.fixture
 def setup():

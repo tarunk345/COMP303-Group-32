@@ -1,8 +1,10 @@
-from Defense import Defense
-from Armors import *
-from typing import Optional
-from Potions import *
+from .imports import *
+from typing import TYPE_CHECKING, Optional
 import random
+from .Armors import *
+from .Defense import Defense
+from .Potions import *
+
 
 class Armor_Set(Defense):
     def __init__(self) -> None:

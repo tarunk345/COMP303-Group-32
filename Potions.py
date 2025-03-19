@@ -1,16 +1,17 @@
-from .Armors import Message
-from .Defense import Defense_type
-from .Armors import Maze, maze_player
-from Defense import *
-from Armors import *
-from typing import Optional
-from tiles.base import MapObject
-from Potions import Defense
+from typing import TYPE_CHECKING, Optional
+from .imports import *
+if TYPE_CHECKING:
+    from message import Message
+    from tiles.base import MapObject
+from .Maze import Maze
+from .Armors import *
+from .Defense import *
+
 
 
 class Potion(Defense, MapObject):
     def __init__(self, name :str,multiplier:int, defense_type:Defense_type,  
-                 player :maze_player, maze: Maze, image_name: str, passable: bool = True, z_index: int = 0) -> None:
+                maze: Maze, image_name: str, passable: bool = True, z_index: int = 0) -> None:
         super().__init__(image_name, passable, z_index)
         self.__name: str = name
         self.__multiplier:int = multiplier
@@ -20,7 +21,6 @@ class Potion(Defense, MapObject):
         self.__attack_value:int
         self.__pick_text : str ='You picked up the '+ name +'! It is applied to '
         self.__not_pick_text : str = 'Cannot pick up the potion! No armor to put potion on!'
-        self.__player :maze_player = player
         self.__maze:Maze = maze
 
     
@@ -49,9 +49,6 @@ class Potion(Defense, MapObject):
     def get_defense_type(self) -> Defense_type:
         return self.__defense_type
     
-    def update_player_attack(self):
-        self.__player.update_attack_value()
-
     def get_pick_text(self) -> str:
         return self.__pick_text
     
@@ -74,7 +71,7 @@ class Potion(Defense, MapObject):
         return attack
 
 
-    def player_entered(self, player: maze_player) -> list[Message]:
+    def player_entered(self, player: 'maze_player') -> list[Message]:
         """if potion not added put the the potion back on grid and return pick text
             if potion added then update attack value of player,update the fields of potion and return not pick text"""
 
@@ -89,12 +86,10 @@ class Potion(Defense, MapObject):
 
     
     
-    
-
 class Defense_potion(Potion):
          
-    def __init__(self, name: str, multiplier: int, player: maze_player, maze: Maze, image_name: str, passable: bool = True, z_index: int = 0) -> None:
-        super().__init__(name, multiplier, Defense_type.DEFENSE_POTION, player, maze, image_name, passable, z_index)
+    def __init__(self, name: str, multiplier: int, maze: Maze, image_name: str, passable: bool = True, z_index: int = 0) -> None:
+        super().__init__(name, multiplier, Defense_type.DEFENSE_POTION, maze, image_name, passable, z_index)
          
 
 
@@ -104,7 +99,7 @@ class Defense_potion(Potion):
         self.set_defense_value(self.get_multiplier()*self.get_armor().get_defense_value())
 
 
-    def player_entered(self, player: maze_player) -> list[Message]:
+    def player_entered(self, player: 'maze_player') -> list[Message]:
         message = super().player_entered(player)
         if message != []:
             return message
@@ -114,18 +109,13 @@ class Defense_potion(Potion):
         defense_increase = (self.get_multiplier()*armor.get_defense_value()) - armor.get_defense_value()
         self.__pick_text = self.__pick_text + str(armor)+ '.\nDefense increased by ' + str(defense_increase)+'!' 
         self.set_fields()
-        self.update_player_attack()
+        player.update_attack_value()
         return [DialogueMessage(self, player, self.__pick_text, image_name)]
-
-
-
-
-
 
 class Attack_potion(Potion):
 
-    def __init__(self, name: str, multiplier: int, player: maze_player, maze: Maze, image_name: str, passable: bool = True, z_index: int = 0) -> None:
-        super().__init__(name, multiplier, Defense_type.ATTACK_POTION, player, maze, image_name, passable, z_index)
+    def __init__(self, name: str, multiplier: int, maze: Maze, image_name: str, passable: bool = True, z_index: int = 0) -> None:
+        super().__init__(name, multiplier, Defense_type.ATTACK_POTION, maze, image_name, passable, z_index)
 
 
     def set_fields(self):
@@ -133,7 +123,7 @@ class Attack_potion(Potion):
         self.set_defense_value(self.get_armor().get_defense_value())
         self.set_attack_value(self.get_multiplier()*self.get_armor().get_attack_value())
 
-    def player_entered(self, player: maze_player) -> list[Message]:
+    def player_entered(self, player: 'maze_player') -> list[Message]:
         message = super().player_entered(player)
         if message != []:
             return message
@@ -143,7 +133,7 @@ class Attack_potion(Potion):
         attack_increase = (self.get_multiplier()*armor.get_attack_value()) - armor.get_attack_value()
         self.__pick_text = self.__pick_text + str(armor)+ '.\nAttack increased by ' + str(attack_increase)+'!'
         self.set_fields() 
-        self.update_player_attack()
+        player.update_attack_value()
         return [DialogueMessage(self, player, self.__pick_text, image_name)]
 
 

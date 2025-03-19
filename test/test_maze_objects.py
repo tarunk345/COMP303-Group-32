@@ -1,8 +1,10 @@
 import pytest
-from COMP303_Group_32.maze_objects import *
-from coord import Coord
-from tiles.base import MapObject
-from Player import HumanPlayer
+from ..maze_objects import *
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from coord import Coord
+    from tiles.base import MapObject
+    from Player import HumanPlayer
 
 # Dummy subclass to instantiate abstract Room
 class DummyRoom(Room):

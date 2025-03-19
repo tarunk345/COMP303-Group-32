@@ -1,7 +1,7 @@
 import pytest
 
-from imports import *
-from ..example_map import ExampleHouse
+from ..imports import *
+from ..Maze import Maze
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -11,9 +11,9 @@ if TYPE_CHECKING:
 class TestExampleHouse:
 
     @pytest.fixture
-    def house(self) -> tuple[ExampleHouse, HumanPlayer]:
+    def house(self) -> tuple[Maze, HumanPlayer]:
         # create a new house and player
-        room = ExampleHouse()
+        room = Maze()
         player = HumanPlayer("test player")
         player.change_room(room)
         player.set_state("score", 0)

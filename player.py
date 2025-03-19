@@ -1,14 +1,16 @@
-from typing import Any, Literal
-from typing import Optional
-from coord import Coord
-from maps.base import Map
-from message import Literal, Message
-from tiles.base import MapObject
-from tiles.map_objects import *
-from Armor_set import Armor_Set
-from Defense import Defense
-from Armors import *
-from Potions import *
+from typing import TYPE_CHECKING, Any, Literal, Optional
+from .Armor_set import Armor_Set
+from .Defense import Defense
+from .Armors import *
+from .imports import * 
+if TYPE_CHECKING:
+    from coord import Coord
+    from maps.base import Map
+    from message import Literal, Message
+    from tiles.base import MapObject
+    from tiles.map_objects import *
+    from .Potions import Potion
+
 
 
     
@@ -53,7 +55,7 @@ class maze_player(HumanPlayer,Defense):
         return self.__armor_set.add_armor(armor)
     
 
-    def check_potion_player(self, potion: Potion):
+    def check_potion_player(self, potion: 'Potion'):
         """return None if potion added
             return new potion if potion is not added"""
         return self.__armor_set.add_potion(potion)
