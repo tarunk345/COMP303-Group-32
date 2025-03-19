@@ -1,7 +1,7 @@
 from Defense import Defense
-from Armors import *
+from Armors import Armor
 from typing import Optional
-from Potions import *
+from Potions import Potion
 import random
 
 class Armor_Set(Defense):

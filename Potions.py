@@ -1,14 +1,16 @@
-from .Armors import Message
-from .Defense import Defense_type
-from .Armors import Maze, maze_player
+from message import *
+from player import maze_player
+from Maze import Maze
 from Defense import *
-from Armors import *
+from Armors import Armor
 from typing import Optional
 from tiles.base import MapObject
-from Potions import Defense
+
+
 
 
 class Potion(Defense, MapObject):
+    @abstractmethod
     def __init__(self, name :str,multiplier:int, defense_type:Defense_type,  
                  player :maze_player, maze: Maze, image_name: str, passable: bool = True, z_index: int = 0) -> None:
         super().__init__(image_name, passable, z_index)
