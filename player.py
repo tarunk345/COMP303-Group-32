@@ -52,7 +52,7 @@ class maze_player(HumanPlayer,Defense):
         return self.__armor_set.add_armor(armor)
     
 
-    def check_potion_player(self, potion: 'Potion'):
+    def check_potion_player(self, potion: Potion):
         """return None if potion added
             return new potion if potion is not added"""
         return self.__armor_set.add_potion(potion)

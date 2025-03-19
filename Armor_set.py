@@ -3,10 +3,6 @@ from Armors import Armor
 from typing import Optional
 from Potions import Potion
 import random
-from .Armors import *
-from .Defense import Defense
-from .Potions import *
-
 
 class Armor_Set(Defense):
     def __init__(self) -> None:
