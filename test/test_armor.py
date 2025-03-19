@@ -33,8 +33,6 @@ def test_decrease_defense_full(setup):
     assert leftover == 10
     assert armor.get_defense_value() == 0
 
-# --- Subclass checks ---
-
 def test_helmet_inheritance(setup):
     player, maze = setup
     helmet = Helmet("Helmet", 10,0, player, maze, "helmet")
