@@ -1,3 +1,4 @@
+from abc import ABC
 from typing import TYPE_CHECKING
 from .imports import * 
 if TYPE_CHECKING:
@@ -9,33 +10,26 @@ if TYPE_CHECKING:
     from maps.base import Map
 
 
-class Room(Map): 
+class Room(Map, ABC): 
     #A generic room that can contain objects and players
 
     def __init__(self, name: str = "DefaultRoom", size: tuple[int, int] = (10,10), entry_point: Coord = Coord(0,0), background_tile: str = "cobblestone"):
         #Constructor for new room
-        super().__init__(name=name, description="", size=size, entry_point=entry_point, background_tile_image=background_tile)
-        # self._objects: list[tuple[MapObject, Coord]] = []
+        super().__init__(name=name, 
+                         description="", size=size, entry_point=entry_point, background_tile_image=background_tile)
+        self.__objects: list[tuple[MapObject, Coord]] = []
 
-    # def add_object(self, obj: MapObject, position: Coord) -> None:
-    #     #Add a new object in the room
-    #     self._objects.append((obj, position))
+    def add_object(self, obj: MapObject, position: Coord) -> None:
+        #Add a new object in the room
+        self.__objects.append((obj, position))
 
-    # def get_objects(self) -> list[tuple[MapObject, Coord]]:
-    #     #Return all objects in the room
-    #     return self._objects
+    def get_objects(self) -> list[tuple[MapObject, Coord]]:
+        #Return all objects in the room
+        return []
      
     def player_entered(self, player: "HumanPlayer"):
         pass
 
-
-##class Corridor(Map):
-    #Creates a new corridor
-
-##    def __init__(self, name: str,description: str, length: int, entry_point: Coord):
-        #Cunstroctor for new corridor
- ##       super().__init__(name=name,description=description, size=(1, length), entry_point=entry_point,background_tile_image="cobblestone")
- ##       self.length=length
 
 class Statue(MapObject):
     #Statue
@@ -77,9 +71,9 @@ class Door(MapObject):
 
 
 class SaunaRoom(Room):
-    def __init__(self, heat_level: int, name: str, size: tuple[int, int], entry_point: Coord, background_tile: str = "floor"):
-        super().__init__(name=name, size=size, entry_point=entry_point, background_tile=background_tile)
-        self.__heat_level = heat_level
+    def __init__(self): #, name: str, size: tuple[int, int], entry_point: Coord, background_tile: str = "floor"):
+        super().__init__(name="Sauna Room", size=(19,16), entry_point=Coord(34,15), background_tile="cobblestone")
+        self.__heat_level = 10
 
     def player_entered(self, player: "HumanPlayer") -> list[Message]:
         return [ServerMessage(player, f"You have entered the Sauna.")]
@@ -97,15 +91,21 @@ class SaunaRoom(Room):
     #add a taking damage method in here
 
 class StatueRoom(Room):
-    def __init__(self, name: str, size: tuple[int, int], entry_point: Coord, background_tile: str = "floor"):
-        super().__init__(name=name, size=size, entry_point=entry_point, background_tile=background_tile)
+    def __init__(self):
+        super().__init__(name="StatueRoom", size=(5,18), entry_point=Coord(6,70), background_tile="cobblestone")
 
     def player_entered(self, player: "HumanPlayer") -> list[Message]:
         return [ServerMessage(player, f"You have entered the Room of Statues.")]
+    
+    def get_objects(self) -> list[tuple[MapObject, Coord]]:
+        return super().get_objects()
 
 class WineCellar(Room):
-    def __init__(self, name: str, size: tuple[int, int], entry_point: Coord, background_tile: str = "floor"):
-        super().__init__(name=name, size=size, entry_point=entry_point, background_tile=background_tile)
+    def __init__(self):
+        super().__init__(name="WineCellar", size=(5,9), entry_point=Coord(53,14), background_tile="cobblestone")
 
     def player_entered(self, player: "HumanPlayer") -> list[Message]:
         return [ServerMessage(player, f"You have entered the Wine Cellar.")]
+    
+    def get_objects(self) -> list[tuple[MapObject, Coord]]:
+        return super().get_objects()

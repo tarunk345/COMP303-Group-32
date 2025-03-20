@@ -44,7 +44,7 @@ def load_module(module, root_folder):
     return module_obj
 
 modules = []
-modules_to_load = ["command", "coord", "message", "NPC", "Player", "maps/base", "tiles/base", "tiles/map_objects"]
+modules_to_load = ["command", "coord", "message", "NPC", "Player", "maps/base", "tiles/base", "tiles/map_objects", "resources"]
 for module in modules_to_load:
     modules.append(load_module(module, mud_folder))
 
