@@ -15,15 +15,15 @@ class Room(Map):
     def __init__(self, name: str = "DefaultRoom", size: tuple[int, int] = (10,10), entry_point: Coord = Coord(0,0), background_tile: str = "cobblestone"):
         #Constructor for new room
         super().__init__(name=name, description="", size=size, entry_point=entry_point, background_tile_image=background_tile)
-        self._objects: list[tuple[MapObject, Coord]] = []
+        # self._objects: list[tuple[MapObject, Coord]] = []
 
-    def add_object(self, obj: MapObject, position: Coord) -> None:
-        #Add a new object in the room
-        self._objects.append((obj, position))
+    # def add_object(self, obj: MapObject, position: Coord) -> None:
+    #     #Add a new object in the room
+    #     self._objects.append((obj, position))
 
-    def get_objects(self) -> list[tuple[MapObject, Coord]]:
-        #Return all objects in the room
-        return self._objects
+    # def get_objects(self) -> list[tuple[MapObject, Coord]]:
+    #     #Return all objects in the room
+    #     return self._objects
      
     def player_entered(self, player: "HumanPlayer"):
         pass
