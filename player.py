@@ -42,11 +42,11 @@ class maze_player(HumanPlayer,Defense):
             and if defense value of one armor is less than it can changed with an armor of same type"""
         
         attack = self.__armor_set.decrease_defense(attack)
-        if attack < self.__defense:
-            self.defense = self.defense - attack
+        if attack < self.__defense_value:
+            self.__defense_value = self.__defense_value - attack
             return 0
 
-        self.__defense = 0
+        self.__defense_value = 0
         return 1
     
     def check_armor_player(self, armor : Armor)->Optional[Defense]:
@@ -56,7 +56,7 @@ class maze_player(HumanPlayer,Defense):
         return self.__armor_set.add_armor(armor)
     
 
-    def check_potion_player(self, potion: Potion):
+    def check_potion_player(self, potion: Potion)->Optional[Potion]:
         """return None if potion added
             return new potion if potion is not added"""
         return self.__armor_set.add_potion(potion)
