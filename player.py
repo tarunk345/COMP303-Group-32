@@ -1,9 +1,11 @@
-from typing import Any, Literal, Optional
-from coord import Coord
-from maps.base import Map
-from message import Literal, Message
-from tiles.base import MapObject
-from tiles.map_objects import *
+from typing import Any, Literal, Optional, TYPE_CHECKING
+from .imports import * 
+if TYPE_CHECKING:
+    from coord import Coord
+    from maps.base import Map
+    from message import Literal, Message
+    from tiles.base import MapObject
+    from tiles.map_objects import *
 
 from .Armor_set import Armor_Set
 from .Defense import Defense

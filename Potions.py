@@ -1,6 +1,9 @@
-from message import *
-from typing import Optional
-from tiles.base import MapObject
+from typing import TYPE_CHECKING
+from .imports import * 
+if TYPE_CHECKING:
+    from message import *
+    from typing import Optional
+    from tiles.base import MapObject
 
 from .Defense import Defense_type, Defense
 from .Maze import Maze
