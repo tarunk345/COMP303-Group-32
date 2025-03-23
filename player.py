@@ -16,20 +16,23 @@ if TYPE_CHECKING:
     
 
 class maze_player(HumanPlayer,Defense):
-    def __init__(self,defense : int, attack_value: int,attack_value_without_armor:int, 
+    def __init__(self,defense : int, attack_value: int,
                  name: str, websocket_state: Any = None, email: str = "", 
                  image: str = 'player1', facing_direction: Literal['up', 'down', 'left', 'right'] = 'down', passable: bool = True) -> None:
         super().__init__(name, websocket_state, email, image, facing_direction, passable)
-        self.__attack_value_without_armor:int = attack_value_without_armor
-        self.__defense: int  = defense
+        self.__defense_value: int  = defense
         self.__attack_value = attack_value
         self.__armor_set: Armor_Set = Armor_Set()
 
     def get_defense_value(self)->int:
-        return self.__defense
+        total_defence_value = self.__defense_value
+        total_defence_value += self.__armor_set.get_defense_value()
+        return total_defence_value
     
     def get_attack_value(self) -> int:
-        return self.__attack_value
+        total_attack_value = self.__attack_value
+        total_attack_value += self.__armor_set.get_attack_value()
+        return total_attack_value
 
 
     def decrease_defense(self , attack:int)->int:
@@ -41,11 +44,11 @@ class maze_player(HumanPlayer,Defense):
             and if defense value of one armor is less than it can changed with an armor of same type"""
         
         attack = self.__armor_set.decrease_defense(attack)
-        if attack < self.__defense:
+        if attack < self.__defense_value:
             self.defense = self.defense - attack
             return 0
 
-        self.__defense = 0
+        self.__defense_value = 0
         return 1
     
     def check_armor_player(self, armor : Armor)->Optional[Defense]:
@@ -60,7 +63,3 @@ class maze_player(HumanPlayer,Defense):
             return new potion if potion is not added"""
         return self.__armor_set.add_potion(potion)
 
-        
-    def update_attack_value(self):
-        """needed an attack_value_without_armor to update the attack value"""
-        self.__attack_value = self.__armor_set.get_attack_value()+self.__attack_value_without_armor
