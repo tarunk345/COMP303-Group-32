@@ -1,11 +1,9 @@
-from typing import Optional
-from .imports import * 
+from .imports import *
+from typing import TYPE_CHECKING, Optional
 import random
-
+from .Armors import *
 from .Defense import Defense
-from .Armors import Armor
 from .Potions import Potion
-
 
 class Armor_Set(Defense):
     def __init__(self) -> None:
@@ -79,17 +77,3 @@ class Armor_Set(Defense):
         self.__list_armors.append(potion)
     
         return None
-    
-
-    
-        
-
-
-
-
-
-
-
-
-
-

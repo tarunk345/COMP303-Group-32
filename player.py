@@ -1,4 +1,7 @@
-from typing import Any, Literal, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Literal, Optional
+from .Armor_set import Armor_Set
+from .Defense import Defense
+from .Armors import *
 from .imports import * 
 if TYPE_CHECKING:
     from coord import Coord
@@ -6,33 +9,27 @@ if TYPE_CHECKING:
     from message import Literal, Message
     from tiles.base import MapObject
     from tiles.map_objects import *
+    from .Potions import Potion
 
-from .Armor_set import Armor_Set
-from .Defense import Defense
-from .Armors import Armor
-from .Potions import Potion
 
 
     
 
 class maze_player(HumanPlayer,Defense):
-    def __init__(self,defense_value : int, attack_value:int, 
+    def __init__(self,defense : int, attack_value: int,attack_value_without_armor:int, 
                  name: str, websocket_state: Any = None, email: str = "", 
                  image: str = 'player1', facing_direction: Literal['up', 'down', 'left', 'right'] = 'down', passable: bool = True) -> None:
         super().__init__(name, websocket_state, email, image, facing_direction, passable)
-        self.__defense_value: int  = defense_value
-        self.__attack_value: int = attack_value
+        self.__attack_value_without_armor:int = attack_value_without_armor
+        self.__defense: int  = defense
+        self.__attack_value = attack_value
         self.__armor_set: Armor_Set = Armor_Set()
 
     def get_defense_value(self)->int:
-        total_defence_value = self.__defense_value
-        total_defence_value += self.__armor_set.get_defense_value()
-        return total_defence_value
+        return self.__defense
     
     def get_attack_value(self) -> int:
-        total_attack_value = self.__attack_value
-        total_attack_value += self.__armor_set.get_attack_value()
-        return total_attack_value
+        return self.__attack_value
 
 
     def decrease_defense(self , attack:int)->int:
@@ -44,11 +41,11 @@ class maze_player(HumanPlayer,Defense):
             and if defense value of one armor is less than it can changed with an armor of same type"""
         
         attack = self.__armor_set.decrease_defense(attack)
-        if attack < self.__defense_value:
-            self.__defense_value = self.__defense_value - attack
+        if attack < self.__defense:
+            self.defense = self.defense - attack
             return 0
 
-        self.__defense_value = 0
+        self.__defense = 0
         return 1
     
     def check_armor_player(self, armor : Armor)->Optional[Defense]:
@@ -58,8 +55,12 @@ class maze_player(HumanPlayer,Defense):
         return self.__armor_set.add_armor(armor)
     
 
-    def check_potion_player(self, potion: Potion)->Optional[Potion]:
+    def check_potion_player(self, potion: 'Potion'):
         """return None if potion added
             return new potion if potion is not added"""
         return self.__armor_set.add_potion(potion)
 
+        
+    def update_attack_value(self):
+        """needed an attack_value_without_armor to update the attack value"""
+        self.__attack_value = self.__armor_set.get_attack_value()+self.__attack_value_without_armor

@@ -4,7 +4,7 @@ from .imports import *
 
 from .maze_objects import *
 if TYPE_CHECKING:
-    from resources import Resources
+    from resources import Resources, get_resource_path
     from coord import Coord
     from maps.base import Map
     from tiles.base import MapObject
@@ -23,7 +23,7 @@ class Maze(Map):
     def get_objects(self) -> list[tuple[MapObject, Coord]]:
         objects: list[tuple[MapObject, Coord]] = []
         # creates maze base with walls
-        self.__create_maze_base()
+        #self.__create_maze_base()
         # add a door
         door = Door('int_entrance', linked_room="Trottier Town")
         objects.append((door, Coord(72,63)))
@@ -35,7 +35,8 @@ class Maze(Map):
         return objects
     
     def __create_maze_base(self):
-        image = Image.open(Resources.get_resource_path("maze_template", ext_folder=True))
+        Resource = Resources()
+        image = Image.open(Resource.get_resource_path("maze_template", ext_folder=True))
         
         for y in range(73):
             for x in range(73):
