@@ -71,22 +71,22 @@ class Armor(Defense, MapObject):
 
 
 class Pants(Armor):
-    def __init__(self, name: str, defense_value: int, attack_value: int, maze: Maze, image_name: str, passable: bool = True, z_index: int = 0) -> None:
-        super().__init__(name, defense_value, attack_value, Defense_type.PANTS, maze, image_name, passable, z_index)
+    def __init__(self, name: str, defense_value: int, attack_value: int, maze: Maze, image_name: str) -> None:
+        super().__init__(name, defense_value, attack_value, Defense_type.PANTS, maze, image_name)
 
 
 
 class Chest_Plate(Armor):
-    def __init__(self, name: str, defense_value: int, attack_value: int, maze: Maze, image_name: str, passable: bool = True, z_index: int = 0) -> None:
-        super().__init__(name, defense_value, attack_value, Defense_type.CHEST_PLATE, maze, image_name, passable, z_index)
+    def __init__(self, name: str, defense_value: int, attack_value: int, maze: Maze, image_name: str) -> None:
+        super().__init__(name, defense_value, attack_value, Defense_type.CHEST_PLATE, maze, image_name)
     
 
 
 class Helmet(Armor):
-    def __init__(self, name: str, defense_value: int, attack_value: int, maze: Maze, image_name: str, passable: bool = True, z_index: int = 0) -> None:
-        super().__init__(name, defense_value, attack_value, Defense_type.HELMET, maze, image_name, passable, z_index)
+    def __init__(self, name: str, defense_value: int, attack_value: int, maze: Maze, image_name: str) -> None:
+        super().__init__(name, defense_value, attack_value, Defense_type.HELMET, maze, image_name)
 
 
 class Boots(Armor):
-    def __init__(self, name: str, defense_value: int, attack_value: int, maze: Maze, image_name: str, passable: bool = True, z_index: int = 0) -> None:
-        super().__init__(name, defense_value, attack_value, Defense_type.BOOTS, maze, image_name, passable, z_index)
+    def __init__(self, name: str, defense_value: int, attack_value: int, maze: Maze, image_name: str) -> None:
+        super().__init__(name, defense_value, attack_value, Defense_type.BOOTS, maze, image_name)
