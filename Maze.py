@@ -33,10 +33,10 @@ class Maze(Map):
     def __create_maze_base(self, objects):
         Resource = Resources()
         image = Image.open(Resource.get_resource_path("maze_template.png", ext_folder=True))
-        
+        rgb_im = image.convert('RGB')
         for y in range(73):
             for x in range(73):
-                pixel = image.getpixel((x,y))
+                pixel = rgb_im.getpixel((x,y))
                 if pixel == (0,0,0):
                     self.add_to_grid(Wall(),Coord(x,y))
                     objects.append((Wall(),Coord(x,y)))
