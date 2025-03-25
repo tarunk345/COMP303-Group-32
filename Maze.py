@@ -17,7 +17,7 @@ class Maze(Map):
             description="",
             size=(73, 73),
             entry_point=Coord(17,14),
-            background_tile_image='cobblestone',
+            background_tile_image='sandstone',
         )
     
     def get_objects(self) -> list[tuple[MapObject, Coord]]:
@@ -28,15 +28,11 @@ class Maze(Map):
         door = Door('int_entrance', linked_room="Trottier Town")
         objects.append((door, Coord(72,63)))
 
-        #door2 = Door('int_entrance', linked_room="Trottier Town")
-        #objects.append((door2,Coord(23,71)))
-
-        # add a statue
         return objects
     
     def __create_maze_base(self):
         Resource = Resources()
-        image = Image.open(Resource.get_resource_path("maze_template", ext_folder=True))
+        image = Image.open(Resource.get_resource_path("maze_template.png", ext_folder=True))
         
         for y in range(73):
             for x in range(73):

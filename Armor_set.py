@@ -59,8 +59,6 @@ class Armor_Set(Defense):
                         return check_armor
                     else :
                         return armor
-                
-        
         return None
     
     def add_potion(self, potion : Potion)->Optional[Potion]  :
