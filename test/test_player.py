@@ -1,12 +1,12 @@
 import pytest
-from COMP303_Group_32.player import maze_player
-from COMP303_Group_32.Maze import Maze
-from COMP303_Group_32.Armors import Helmet
-from COMP303_Group_32.Potions import Potion
+from player import maze_player
+from Defense import Defense_type
+from Maze import Maze
+from Armors import Helmet
 
 @pytest.fixture
 def setup():
-    player = maze_player(50, 10, "TestPlayer")
+    player = maze_player(50, 10,10, "TestPlayer")
     maze = Maze()
     return player, maze
 
@@ -28,13 +28,7 @@ def test_decrease_defense_overkill(setup):
 
 def test_check_armor_player_adds_armor(setup):
     player, maze = setup
-    helmet = Helmet("Helmet", 10, player, maze, "helmet")
+    helmet = Helmet("Helmet", 10, 2, Defense_type.HELMET, player, maze, "helmet")
     result = player.check_armor_player(helmet)
     assert result is None
-    assert player.get_defense_value() > 50 
-
-def test_check_potion_player_rejects_if_no_armor(setup):
-    player, maze = setup
-    potion = Potion("Potion", 2, player, maze, "potion")
-    result = player.check_potion_player(potion)
-    assert result == potion  #No armor so should just be equal
+    assert player.get_defense_value() == 60

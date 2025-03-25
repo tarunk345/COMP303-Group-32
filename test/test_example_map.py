@@ -1,7 +1,7 @@
 import pytest
 
 from imports import *
-from ..example_map import ExampleHouse
+from example_map import ExampleHouse
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
