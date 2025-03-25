@@ -23,14 +23,14 @@ class Maze(Map):
     def get_objects(self) -> list[tuple[MapObject, Coord]]:
         objects: list[tuple[MapObject, Coord]] = []
         # creates maze base with walls
-        #self.__create_maze_base()
+        self.__create_maze_base(objects)
         # add a door
         door = Door('int_entrance', linked_room="Trottier Town")
         objects.append((door, Coord(72,63)))
 
         return objects
     
-    def __create_maze_base(self):
+    def __create_maze_base(self, objects):
         Resource = Resources()
         image = Image.open(Resource.get_resource_path("maze_template.png", ext_folder=True))
         
@@ -39,3 +39,4 @@ class Maze(Map):
                 pixel = image.getpixel((x,y))
                 if pixel == (0,0,0):
                     self.add_to_grid(Wall(),Coord(x,y))
+                    objects.append((Wall(),Coord(x,y)))
