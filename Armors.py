@@ -5,18 +5,18 @@ if TYPE_CHECKING:
     from message import *
     from .player import maze_player
 from .Defense import *
-from .Maze import Maze
+from .Maze import ExampleHouse
 from .Potions import Potion
 
 class Armor(Defense, MapObject):
     @abstractmethod
-    def __init__(self, name :str, defense_value:int, attack_value:int,defense_type:Defense_type, maze: Maze, image_name: str, passable: bool = True, z_index: int = 0) -> None:
+    def __init__(self, name :str, defense_value:int, attack_value:int,defense_type:Defense_type, maze: ExampleHouse, image_name: str, passable: bool = True, z_index: int = 0) -> None:
         super().__init__(image_name, passable, z_index)
         self.__name: str = name
         self.__defense_value:int = defense_value
         self.__attack_value:int = attack_value
         self.__defense_type:Defense_type = defense_type
-        self.__maze:Maze = maze
+        self.__maze:ExampleHouse = maze
     
     def __str__(self)->str:
         return self.__name
@@ -71,22 +71,22 @@ class Armor(Defense, MapObject):
 
 
 class Pants(Armor):
-    def __init__(self, name: str, defense_value: int, attack_value: int, maze: Maze, image_name: str) -> None:
+    def __init__(self, name: str, defense_value: int, attack_value: int, maze: ExampleHouse, image_name: str) -> None:
         super().__init__(name, defense_value, attack_value, Defense_type.PANTS, maze, image_name)
 
 
 
 class Chest_Plate(Armor):
-    def __init__(self, name: str, defense_value: int, attack_value: int, maze: Maze, image_name: str) -> None:
+    def __init__(self, name: str, defense_value: int, attack_value: int, maze: ExampleHouse, image_name: str) -> None:
         super().__init__(name, defense_value, attack_value, Defense_type.CHEST_PLATE, maze, image_name)
     
 
 
 class Helmet(Armor):
-    def __init__(self, name: str, defense_value: int, attack_value: int, maze: Maze, image_name: str) -> None:
+    def __init__(self, name: str, defense_value: int, attack_value: int, maze: ExampleHouse, image_name: str) -> None:
         super().__init__(name, defense_value, attack_value, Defense_type.HELMET, maze, image_name)
 
 
 class Boots(Armor):
-    def __init__(self, name: str, defense_value: int, attack_value: int, maze: Maze, image_name: str) -> None:
+    def __init__(self, name: str, defense_value: int, attack_value: int, maze: ExampleHouse, image_name: str) -> None:
         super().__init__(name, defense_value, attack_value, Defense_type.BOOTS, maze, image_name)

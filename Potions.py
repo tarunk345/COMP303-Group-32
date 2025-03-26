@@ -4,7 +4,7 @@ from .imports import *
 if TYPE_CHECKING:
     from message import Message
     from tiles.base import MapObject
-from .Maze import Maze
+from .Maze import ExampleHouse
 from .Armors import *
 from .Defense import *
 
@@ -13,7 +13,7 @@ from .Defense import *
 class Potion(Defense, MapObject):
     @abstractmethod
     def __init__(self, name :str,multiplier:int, defense_type:Defense_type,  
-                maze: Maze, image_name: str, passable: bool = True, z_index: int = 0) -> None:
+                maze: ExampleHouse, image_name: str, passable: bool = True, z_index: int = 0) -> None:
         super().__init__(image_name, passable, z_index)
         self.__name: str = name
         self.__multiplier:int = multiplier
@@ -21,7 +21,7 @@ class Potion(Defense, MapObject):
         self.__armor:Defense
         self.__defense_value:int
         self.__attack_value:int
-        self.__maze:Maze = maze
+        self.__maze:ExampleHouse = maze
 
     
     def __str__(self)->str:
@@ -83,7 +83,7 @@ class Potion(Defense, MapObject):
     
 class Defense_potion(Potion):
          
-    def __init__(self, name: str, multiplier: int, maze: Maze, image_name: str) -> None:
+    def __init__(self, name: str, multiplier: int, maze: ExampleHouse, image_name: str) -> None:
         super().__init__(name, multiplier, Defense_type.DEFENSE_POTION, maze, image_name)
          
     def set_fields(self):
@@ -104,7 +104,7 @@ class Defense_potion(Potion):
 
 class Attack_potion(Potion):
 
-    def __init__(self, name: str, multiplier: int, maze: Maze, image_name: str) -> None:
+    def __init__(self, name: str, multiplier: int, maze: ExampleHouse, image_name: str) -> None:
         super().__init__(name, multiplier, Defense_type.ATTACK_POTION, maze, image_name)
 
     def get_attack_value(self) -> int:

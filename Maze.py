@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from tiles.base import MapObject
     from tiles.map_objects import *
 
-class Maze(Map):
+class ExampleHouse(Map):
     def __init__(self) -> None:
         super().__init__(
             name="Maze",

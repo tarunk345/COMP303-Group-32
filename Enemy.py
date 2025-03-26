@@ -1,7 +1,7 @@
 from typing import List, TYPE_CHECKING, Literal
 from .Defense import Defense
 from .player import maze_player
-from .Maze import Maze
+from .Maze import ExampleHouse
 from .imports import * 
 if TYPE_CHECKING:
     from Player import HumanPlayer
