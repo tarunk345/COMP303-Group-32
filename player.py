@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING, Any, Literal, Optional
 from .Armor_set import Armor_Set
 from .Defense import Defense
-from .Armors import *
+from .Armors import Armor
 from .imports import * 
 if TYPE_CHECKING:
     from coord import Coord
