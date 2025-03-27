@@ -5,12 +5,12 @@ if TYPE_CHECKING:
     from message import *
     from coord import Coord
     from command import MenuCommand
-    from tiles.base import MapObject, Exit, Observer, Tile
+    from tiles.base import MapObject, Exit, Observer, Tile, Subject, GameEvent
     from NPC import NPC
     from maps.base import Map
 
 
-class Room(Map, ABC): 
+class Room(Map, ABC, Subject): 
     #A generic room that can contain objects and players
 
     def __init__(self, name: str = "DefaultRoom", size: tuple[int, int] = (10,10), entry_point: Coord = Coord(0,0), background_tile: str = "cobblestone"):
@@ -18,6 +18,7 @@ class Room(Map, ABC):
         super().__init__(name=name, 
                          description="", size=size, entry_point=entry_point, background_tile_image=background_tile)
         self.__objects: list[tuple[MapObject, Coord]] = []
+        self.__observer = Observer()
 
     def add_object(self, obj: MapObject, position: Coord) -> None:
         #Add a new object in the room
@@ -28,7 +29,8 @@ class Room(Map, ABC):
         return []
      
     def player_entered(self, player: "HumanPlayer"):
-        pass
+        event = GameEvent('door_close')
+        self.notify_each(event)
 
 
 class Statue(MapObject):
@@ -42,14 +44,8 @@ class Statue(MapObject):
         return [ServerMessage(player, self.__description)]
 
 class Wall(MapObject):
-    def __init__(self, image_name: str = "wall", passable: bool = False):
+    def __init__(self, image_name: str = "wall5", passable: bool = False):
         super().__init__(image_name=image_name,passable=passable, z_index=1)
-
-class Floor(MapObject):
-    def __init__(self, image_name: str = "cobblestone", passable: bool = True):
-        super().__init__(image_name=image_name,passable=passable,z_index=0)
-
-
 
 
 class SaunaRoom(Room):
@@ -59,6 +55,11 @@ class SaunaRoom(Room):
 
     def player_entered(self, player: "HumanPlayer") -> list[Message]:
         return [ServerMessage(player, f"You have entered the Sauna.")]
+    
+    def get_objects(self) -> list[tuple[MapObject, Coord]]:
+        objects = []
+
+        return objects
 
     def change_heat_intensity(self, heat: int) -> str:
       self.__heat_level += heat
@@ -90,4 +91,15 @@ class WineCellar(Room):
         return [ServerMessage(player, f"You have entered the Wine Cellar.")]
     
     def get_objects(self) -> list[tuple[MapObject, Coord]]:
-        return super().get_objects()
+        objects: list[tuple[MapObject, Coord]] = []
+        
+        
+
+        return objects
+    
+class FinalBossRoom(Room):
+    def __init__(self):
+        super().__init__(name="FinalBossRoom",size=(10,30),entry_point=Coord(0,23),background_tile="sand")
+
+    def player_entered(self, player: "HumanPlayer") -> list[Message]:
+        return [ServerMessage(player, f"The air is still...")]

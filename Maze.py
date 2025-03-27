@@ -16,7 +16,7 @@ class ExampleHouse(Map):
             description="",
             size=(73, 73),
             entry_point=Coord(72,63),
-            background_tile_image='sandstone',
+            background_tile_image='sandstone3',
         )
     
     def get_objects(self) -> list[tuple[MapObject, Coord]]:
@@ -35,11 +35,11 @@ class ExampleHouse(Map):
     
     def __create_maze_base(self, objects):
         Resource = Resources()
-        image = Image.open(Resource.get_resource_path("maze_template2.png", ext_folder=True))
+        image = Image.open(Resource.get_resource_path("maze_template4.png", ext_folder=True))
         rgb_im = image.convert('RGB')
-        for y in range(73):
-            for x in range(73):
+        for x in range(73):
+            for y in range(73):
                 pixel = rgb_im.getpixel((x,y))
                 if pixel == (255,255,255):
-                    self.add_to_grid(Sign(),Coord(x,y))
+                    self.add_to_grid(Wall(),Coord(y,x))
                     # objects.append((Sign(),Coord(x,y)))
