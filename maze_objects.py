@@ -18,7 +18,9 @@ class Room(Map, ABC, Subject):
         super().__init__(name=name, 
                          description="", size=size, entry_point=entry_point, background_tile_image=background_tile)
         self.__objects: list[tuple[MapObject, Coord]] = []
-        self.__observer = Observer()
+        self._observers: list[Observer] = []
+        self.enemies = []
+        self.enemies_defeated = False
 
     def add_object(self, obj: MapObject, position: Coord) -> None:
         #Add a new object in the room
@@ -31,6 +33,7 @@ class Room(Map, ABC, Subject):
     def player_entered(self, player: "HumanPlayer"):
         event = GameEvent('door_close')
         self.notify_each(event)
+    
 
 
 class Statue(MapObject):
