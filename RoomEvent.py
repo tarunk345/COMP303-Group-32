@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 from .imports import *
 if TYPE_CHECKING:
     from tiles.base import GameEvent
-from .player import HumanPlayer
+    from Player import HumanPlayer
 
 class RoomEvent(GameEvent):
 

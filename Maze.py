@@ -2,6 +2,7 @@ from typing import TYPE_CHECKING
 from PIL import Image
 from .imports import * 
 from .maze_objects import *
+from .Defense import *
 if TYPE_CHECKING:
     from resources import Resources, get_resource_path
     from coord import Coord
@@ -27,9 +28,9 @@ class ExampleHouse(Map):
         door = Door('int_entrance', linked_room="Trottier Town")
         
         objects.append((door, Coord(72,63)))
-
-        # helmet = Chest_Plate('helmet',5,5,self,'water_2.png')
-        # objects.append((helmet, Coord(70,63)))
+        player = maze_player(5,5)
+        helmet = Chest_Plate(5,5,player,self,"coin")
+        objects.append((helmet, Coord(60,63)))
 
         return objects
     

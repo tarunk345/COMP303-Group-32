@@ -1,6 +1,6 @@
 from typing import List, TYPE_CHECKING, Literal
-from .Defense import Defense
-from .player import maze_player
+
+from .Defense import *
 from .Maze import ExampleHouse
 from .imports import * 
 if TYPE_CHECKING:
@@ -38,7 +38,7 @@ class Enemy(NPC, Defense, MapObject):
             self.defense -= attack
             return 0  # No remaining damage
 
-    def player_moved(self, player: maze_player) -> List[Message]:
+    def player_moved(self, player: HumanPlayer) -> List[Message]:
         """Handle the event of the player moving. If the player is within a certain distance, the enemy attacks."""
         messages: List[Message] = super().player_moved(player)  # Call the parent class's method
 
