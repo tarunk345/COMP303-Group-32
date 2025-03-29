@@ -3,9 +3,12 @@ from abc import ABC, abstractmethod
 from enum import Enum
 import random
 
+
+
 from .imports import * 
 
 if TYPE_CHECKING:
+    from coord import Coord
     from tiles.base import MapObject
     from message import *
     from .Maze import ExampleHouse
@@ -49,7 +52,7 @@ class Defense(ABC):
 
 class Armor(Defense, MapObject):
     @abstractmethod
-    def __init__(self, defense_value:int, attack_value:int,defense_type:Defense_type,player:"maze_player", 
+    def __init__(self, defense_value:int, attack_value:int,defense_type:Defense_type,player:"maze_player", maze_position:Coord, 
                  maze: "ExampleHouse", image_name: str, passable: bool = True, z_index: int = 0) -> None:
         super().__init__(image_name, passable, z_index)
         self.__defense_value:int = defense_value
@@ -57,9 +60,13 @@ class Armor(Defense, MapObject):
         self.__defense_type:Defense_type = defense_type
         self.__maze:"ExampleHouse" = maze
         self.__player:"maze_player" = player
+        self.__maze_position:Coord = maze_position
     
     def __str__(self)->str:
         return self.get_image_name()
+    
+    def get_maze_position(self) -> Coord:
+        return self.__maze_position
 
     def get_defense_value(self) -> int:
         return self.__defense_value
@@ -80,13 +87,12 @@ class Armor(Defense, MapObject):
             pick_text : str ='You picked up the '+ self.get_image_name() +'!\n Defense increased by: ' + str(self.__defense_value) +'!\n Attack increased by: ' + str(self.__attack_value)+'!'
             return [DialogueMessage(self, player, pick_text,self.get_image_name())]
         elif armor == self :
-            self.__maze.add_to_grid(self,self.get_position())
+            self.__maze.add_to_grid(self,self.__maze_position)
             not_pick_text : str = 'current' + self.get_image_name() + 'has more defense!'
             return [DialogueMessage(self, player, not_pick_text,self.get_image_name())]
         else:
             if(isinstance(armor,(Armor,Potion))): 
-                armor.set_position(self.get_position())
-                self.__maze.add_to_grid(armor,armor.get_position())
+                self.__maze.add_to_grid(armor,self.__maze_position)
                 defense_changed: int = self.__defense_value - armor.__defense_value
                 attack_changed:int = self.__attack_value - armor.__attack_value
                 if defense_changed>=0 and attack_changed>=0:
@@ -111,25 +117,25 @@ class Armor(Defense, MapObject):
 
 
 class Pants(Armor):
-    def __init__(self, defense_value: int, attack_value: int, player: "maze_player", maze: "ExampleHouse", image_name: str) -> None:
-        super().__init__(defense_value, attack_value, Defense_type.PANTS, player, maze, image_name)
+    def __init__(self, defense_value: int, attack_value: int, maze_position:Coord, player: "maze_player", maze: "ExampleHouse", image_name: str) -> None:
+        super().__init__(defense_value, attack_value, Defense_type.PANTS, player,maze_position, maze, image_name)
     
 
 
 
 class Chest_Plate(Armor):
-    def __init__(self, defense_value: int, attack_value: int, player: "maze_player", maze: "ExampleHouse", image_name: str) -> None:
-        super().__init__(defense_value, attack_value, Defense_type.CHEST_PLATE, player, maze, image_name)
+    def __init__(self, defense_value: int, attack_value: int, maze_position:Coord, player: "maze_player", maze: "ExampleHouse", image_name: str) -> None:
+        super().__init__(defense_value, attack_value, Defense_type.CHEST_PLATE, player,maze_position, maze, image_name)
     
 
 
 class Helmet(Armor):
-    def __init__(self, defense_value: int, attack_value: int, player: "maze_player", maze: "ExampleHouse", image_name: str) -> None:
-        super().__init__(defense_value, attack_value, Defense_type.HELMET, player, maze, image_name)
+    def __init__(self, defense_value: int, attack_value: int, maze_position:Coord, player: "maze_player", maze: "ExampleHouse", image_name: str) -> None:
+        super().__init__(defense_value, attack_value, Defense_type.HELMET, player,maze_position, maze, image_name)
 
 class Boots(Armor):
-    def __init__(self, defense_value: int, attack_value: int, player: "maze_player", maze: "ExampleHouse", image_name: str) -> None:
-        super().__init__(defense_value, attack_value, Defense_type.BOOTS, player, maze, image_name)
+    def __init__(self, defense_value: int, attack_value: int, maze_position:Coord, player: "maze_player", maze: "ExampleHouse", image_name: str) -> None:
+        super().__init__(defense_value, attack_value, Defense_type.BOOTS, player,maze_position, maze, image_name)
 
 
 

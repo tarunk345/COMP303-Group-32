@@ -29,8 +29,35 @@ class ExampleHouse(Map):
         
         objects.append((door, Coord(72,63)))
         player = maze_player(5,5)
-        helmet = Chest_Plate(5,5,player,self,"coin")
-        objects.append((helmet, Coord(60,63)))
+        Gold_chest_plate = Chest_Plate(5,5,Coord(60,63),player,self,"Gold Chest Plate")
+        objects.append((Gold_chest_plate, Coord(60,63)))
+        Gold_Helmet = Helmet(20,20,Coord(50,63),player,self,"Gold Helmet")
+        objects.append((Gold_Helmet, Coord(50,63)))
+        Gold_Boots = Boots(20,20,Coord(60,63),player,self,"Gold Boots")
+        objects.append((Gold_Boots, Coord(20,63)))
+
+        Silver_chest_plate = Chest_Plate(10,10,Coord(62,63),player,self,"Silver Chest Plate")
+        objects.append((Silver_chest_plate, Coord(62,63)))
+        Silver_Helmet = Helmet(5,5,Coord(60,63),player,self,"Silver Helmet")
+        objects.append((Silver_Helmet, Coord(60,15)))
+        Silver_Boots = Boots(5,5,Coord(60,63),player,self,"Silver Boots")
+        objects.append((Silver_Boots, Coord(20,20)))
+
+
+        Bronze_chest_plate = Chest_Plate(5,5,Coord(60,63),player,self,"Bronze Chest Plate")
+        objects.append((Bronze_chest_plate, Coord(30,30)))
+        Bronze_Helmet = Helmet(5,5,Coord(60,63),player,self,"Bronze Helmet")
+        objects.append((Bronze_Helmet, Coord(10,63)))
+        Bronze_Boots = Boots(5,5,Coord(60,63),player,self,"Bronze Boots")
+        objects.append((Bronze_Boots, Coord(70,50)))
+
+        Iron_chest_plate = Chest_Plate(5,5,Coord(60,63),player,self,"Iron Chest Plate")
+        objects.append((Iron_chest_plate, Coord(50,50)))
+        Iron_Helmet = Helmet(5,5,Coord(60,63),player,self,"Iron Helmet")
+        objects.append((Iron_Helmet, Coord(65,50)))
+        Iron_Boots = Boots(5,5,Coord(60,63),player,self,"Iron Boots")
+        objects.append((Iron_Boots, Coord(35,20)))
+
 
         return objects
     
