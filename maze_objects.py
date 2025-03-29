@@ -1,6 +1,7 @@
 from abc import ABC
 from typing import TYPE_CHECKING
-from .imports import * 
+from .imports import *
+from .Enemy import Enemy
 if TYPE_CHECKING:
     from message import *
     from coord import Coord
@@ -19,7 +20,7 @@ class Room(Map, ABC, Subject):
                          description="", size=size, entry_point=entry_point, background_tile_image=background_tile)
         self.__objects: list[tuple[MapObject, Coord]] = []
         self._observers: list[Observer] = []
-        self.enemies = []
+        self.enemies: list[Enemy] = []
         self.enemies_defeated = False
 
     def add_object(self, obj: MapObject, position: Coord) -> None:
@@ -34,7 +35,12 @@ class Room(Map, ABC, Subject):
         event = GameEvent('door_close')
         self.notify_each(event)
     
+    def update(self):
+        messages = super().update()
+        #if self.enemies and all(e.is_defeated() for e in self.enemies):
+            
 
+    
 
 class Statue(MapObject):
     #Statue
@@ -73,6 +79,7 @@ class SaunaRoom(Room):
         return "warming and relaxing"
       else:
         return "lukewarm"
+    
 
     #add a taking damage method in here
 

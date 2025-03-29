@@ -71,3 +71,4 @@ class ExampleHouse(Map):
                 if pixel == (255,255,255):
                     self.add_to_grid(Wall(),Coord(y,x))
                     # objects.append((Sign(),Coord(x,y)))
+
