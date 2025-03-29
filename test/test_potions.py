@@ -14,12 +14,12 @@ def setup():
 
 def test_potion_str(setup):
     player, maze = setup
-    potion = Potion("Defense Boost", 2, Defense_type.DEFENSE_POTION, player, maze, "potion")
+    potion = Defense_potion("Defense Boost", 2, Defense_type.DEFENSE_POTION, player, maze, "potion")
     assert str(potion) == "Defense Boost"
 
 def test_set_and_get_armor(setup):
     player, maze = setup
-    potion = Potion("Defense Boost", 2, Defense_type.DEFENSE_POTION, player, maze, "potion")
+    potion = Defense_potion("Defense Boost", 2, Defense_type.DEFENSE_POTION, player, maze, "potion")
     helmet = Helmet("Helmet", 10, 2, Defense_type.HELMET, player, maze, "helmet")
     potion.set_armor(helmet)
     assert potion.get_defense_value() == 20
@@ -27,14 +27,14 @@ def test_set_and_get_armor(setup):
 
 def test_defense_value_with_zero_armor_defense(setup):
     player, maze = setup
-    potion = Potion("Weak Potion", 5, Defense_type.DEFENSE_POTION, player, maze, "potion")
+    potion = Defense_potion("Weak Potion", 5, Defense_type.DEFENSE_POTION, player, maze, "potion")
     armor = Helmet("Paper Hat", 0, 1, Defense_type.HELMET, player, maze, "paper_hat")
     potion.set_armor(armor)
     assert potion.get_defense_value() == 0
 
     def test_potion_with_attack_potion_type(setup):
     player, maze = setup
-    potion = Potion("Attack Potion", 5, Defense_type.ATTACK_POTION, player, maze, "potion")
+    potion = Attack_potion("Attack Potion", 5, Defense_type.ATTACK_POTION, player, maze, "potion")
     assert str(potion) == "Attack Potion"
     assert potion.get_defense_value() == 0  # No armor assigned
 
