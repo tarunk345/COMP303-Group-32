@@ -58,6 +58,13 @@ class ExampleHouse(Map):
         Iron_Boots = Boots(5,5,Coord(60,63),player,self,"Iron Boots")
         objects.append((Iron_Boots, Coord(35,20)))
 
+        ##Doors
+        door = Door("wooden_door","Sauna Room")
+        objects.append((door, Coord(34,15)))
+
+        door = Door("wooden_door", "Wine Cellar")
+        objects.append((door, Coord(53,14)))
+
 
         return objects
     
@@ -69,6 +76,4 @@ class ExampleHouse(Map):
             for y in range(73):
                 pixel = rgb_im.getpixel((x,y))
                 if pixel == (255,255,255):
-                    self.add_to_grid(Wall(),Coord(y,x))
-                    # objects.append((Sign(),Coord(x,y)))
-
+                    self.add_to_grid(Sign(),Coord(y,x))
