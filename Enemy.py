@@ -98,3 +98,26 @@ class Minotaur(Enemy):
 
     def get_attack_value(self) -> int:
         return self.__attack_damage
+
+class Gladiator(Enemy):
+    def __init__(
+        self,
+        name: str,
+        image: str,
+        encounter_text: str,
+        attack_damage: int,
+        defense: int,
+        facing_direction: Literal['up', 'down', 'left', 'right'] = 'down',
+        staring_distance: int = 1,
+        bg_music: str = ''
+    ):
+        super().__init__(
+            defense=defense,
+            attack_damage=attack_damage,
+            name=name,
+            image=image,
+            encounter_text=encounter_text,
+            facing_direction=facing_direction,
+            staring_distance=staring_distance,
+            bg_music=bg_music
+        )
