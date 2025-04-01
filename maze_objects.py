@@ -1,12 +1,11 @@
 from abc import ABC
 from typing import TYPE_CHECKING
 from .imports import *
-from .Enemy import Enemy
 if TYPE_CHECKING:
     from message import *
     from coord import Coord
     from command import MenuCommand
-    from tiles.base import MapObject, Exit, Observer, Tile, Subject, GameEvent
+    from tiles.base import MapObject, Exit, Observer, Tile, Subject, GameEvent, Door
     from NPC import NPC
     from maps.base import Map
 
@@ -20,7 +19,6 @@ class Room(Map, ABC, Subject):
                          description="", size=size, entry_point=entry_point, background_tile_image=background_tile)
         self.__objects: list[tuple[MapObject, Coord]] = []
         self._observers: list[Observer] = []
-        self.enemies: list[Enemy] = []
         self.enemies_defeated = False
 
     def add_object(self, obj: MapObject, position: Coord) -> None:
@@ -59,14 +57,17 @@ class Wall(MapObject):
 
 class SaunaRoom(Room):
     def __init__(self): #, name: str, size: tuple[int, int], entry_point: Coord, background_tile: str = "floor"):
-        super().__init__(name="Sauna Room", size=(19,16), entry_point=Coord(34,15), background_tile="cobblestone")
+        super().__init__(name="Sauna Room", size=(19,17), entry_point=Coord(34,15), background_tile="sandstone3")
         self.__heat_level = 10
 
     def player_entered(self, player: "HumanPlayer") -> list[Message]:
         return [ServerMessage(player, f"You have entered the Sauna.")]
     
     def get_objects(self) -> list[tuple[MapObject, Coord]]:
-        objects = []
+        objects: list[tuple[MapObject,Coord]] = []
+
+        door = Door("wooden_door", "Maze",True)
+        objects.append((door,Coord(14,14)))
 
         return objects
 
@@ -103,9 +104,13 @@ class WineCellar(Room):
     def get_objects(self) -> list[tuple[MapObject, Coord]]:
         objects: list[tuple[MapObject, Coord]] = []
         
-        
+        door = Door("wooden_door", "Maze", True)
+        exit = Exit(door, Coord(2,0),"Maze")
+        objects.append((door,Coord(2,0)))
 
         return objects
+    
+    
     
 class FinalBossRoom(Room):
     def __init__(self):

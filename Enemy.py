@@ -12,7 +12,7 @@ if TYPE_CHECKING:
     from tiles.map_objects import *
 
 
-class Enemy(NPC, Defense, MapObject):
+class Enemy(NPC, Defense, CharacterMapObject):
     def __init__(self, defense: int, attack_damage: int, name: str, image: str, encounter_text : str, facing_direction: Literal['up', 'down', 'left', 'right'] = 'down', staring_distance: int = 0, bg_music=''): 
         super().__init__(name=name,image=image,encounter_text=encounter_text,facing_direction=facing_direction,staring_distance=staring_distance,bg_music=bg_music)
         self.__attack_damage = attack_damage

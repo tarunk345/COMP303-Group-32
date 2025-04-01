@@ -62,12 +62,23 @@ class ExampleHouse(Map):
         door = Door("wooden_door","Sauna Room")
         objects.append((door, Coord(34,15)))
 
+        wine_cellar = WineCellar()
         door = Door("wooden_door", "Wine Cellar")
-        objects.append((door, Coord(53,14)))
+        door.connect_to(wine_cellar,Coord(2,0))
+        objects.append((door, Coord(70,57)))
 
 
         return objects
     
+    def getRandomCoords(self, count : int) -> list[Coord]:
+        coords : list[Coord] = []
+        for i in range (count):
+            x = random.randint(0,72)
+            y = random.randint(0,72)
+            if (self.get_map_objects_at(Coord(x,y)).__class__ == Background):
+                coords.append(Coord(x,y))
+        return coords
+
     def __create_maze_base(self, objects):
         Resource = Resources()
         image = Image.open(Resource.get_resource_path("maze_template4.png", ext_folder=True))

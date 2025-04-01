@@ -13,6 +13,7 @@ if TYPE_CHECKING:
     from message import *
     from .Maze import ExampleHouse
     from message import Message
+    from tiles.base import Subject
 
 
 
@@ -344,7 +345,7 @@ class Armor_Set(Defense):
 
 
 
-class maze_player(Defense):
+class maze_player(Defense, Subject):
     def __init__(self,defense : int, attack_value: int,) -> None:
         super().__init__()
         self.__defense_value: int  = defense
