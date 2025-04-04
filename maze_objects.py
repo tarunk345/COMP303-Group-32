@@ -1,8 +1,6 @@
 from abc import ABC
 from typing import TYPE_CHECKING
 
-from Player import HumanPlayer
-from message import Message
 from .imports import *
 from .Defense import Potion, Attack_potion, Defense_potion, maze_player, Defense_type
 if TYPE_CHECKING:
@@ -12,6 +10,7 @@ if TYPE_CHECKING:
     from tiles.base import MapObject, Exit, Observer, Tile, Subject, GameEvent, Door
     from NPC import NPC
     from maps.base import Map
+    from Player import HumanPlayer
 
 
 class Room(Map, ABC, Subject): 
@@ -67,21 +66,14 @@ class Wall(MapObject):
 class Barrel(MapObject):
     def __init__(self, image_name: str = "barrel", passable: bool = False):
         super().__init__(image_name=image_name,passable=passable, z_index=1)
-        self.potion = None
 
-    def player_interacted(self, player: maze_player) -> list[Message]:
-        player.add_potion(self.potion)
-        return []
-    
-    def add_barrelpotion(self, type: str, player : maze_player, maze):
-        if type == 'attack':
-            self.potion = Attack_potion(5,defense_type=Defense_type.ATTACK_POTION, player=player,maze='ExampleHouse',image_name="attackpotion")
-        elif type == 'defense':
-            self.potion = Defense_potion(5,Defense_type.DEFENSE_POTION, player=player,maze='', image_name="defensepotion")
+class Column(MapObject):
+    def __init__(self, image_name: str = "column", passable: bool = False, z_index: int = 0) -> None:
+        super().__init__(image_name, passable, z_index)
 
 class SaunaRoom(Room):
     def __init__(self): #, name: str, size: tuple[int, int], entry_point: Coord, background_tile: str = "floor"):
-        super().__init__(name="Sauna Room", size=(19,17), entry_point=Coord(34,15), background_tile="sandstone3")
+        super().__init__(name="Sauna Room", size=(19,17), entry_point=Coord(34,15), background_tile="saunatile")
         self.__heat_level = 10
     
     def update(self):
@@ -98,6 +90,14 @@ class SaunaRoom(Room):
         door = Door("wooden_door", "Example House",True)
         objects.append((door,Coord(18,15)))
 
+        for x in range(0,17,2):
+            objects.append((Column(), Coord(x,0)))
+            objects.append((Column(),Coord(0,x)))
+            objects.append((Column(),Coord(x,16)))
+
+        for x in range(17):
+            if (x != 15):
+                objects.append((Column(image_name="columntop"), Coord(18,x)))
         return objects
 
     def change_heat_intensity(self, heat: int) -> str:

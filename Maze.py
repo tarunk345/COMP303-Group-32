@@ -78,11 +78,12 @@ class ExampleHouse(Map):
 
         ##Doors
         door = Door("wooden_door","Sauna Room")
-        objects.append((door, Coord(34,15)))
+        objects.append((door, Coord(70,57)))
+        #objects.append((door, Coord(34,15)))
 
         door2 = Door("wooden_door", "Wine Cellar")
-        # objects.append((door2, Coord(53,14)))
-        objects.append((door2, Coord(70,57)))
+        objects.append((door2, Coord(53,14)))
+        #objects.append((door2, Coord(70,57)))
 
 
         return objects
