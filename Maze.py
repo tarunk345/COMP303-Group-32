@@ -3,6 +3,7 @@ from PIL import Image
 from .imports import * 
 from .maze_objects import *
 from .Defense import *
+from .Observers import *
 if TYPE_CHECKING:
     from resources import Resources, get_resource_path
     from coord import Coord
@@ -19,7 +20,24 @@ class ExampleHouse(Map):
             entry_point=Coord(72,63),
             background_tile_image='sandstone3',
         )
+        self.__observers : list[Observer] = []
+
+    def update(self):
+        if (self.__observers.count == 0):
+            self.registerObserver(GladiatorSpawner(room=self,center=Coord(36,36)))
     
+    def registerObserver(self, observer : Observer) -> None:
+        self.__observers.append(observer)
+
+
+    def player_entered(self, player: "HumanPlayer") -> list[Message]:
+        messages = []
+        for observer in self.__observers:
+            observer.update_on_notification("player_entered")
+            #messages += observer.get_messages()
+        return messages
+
+        
     def get_objects(self) -> list[tuple[MapObject, Coord]]:
         objects: list[tuple[MapObject, Coord]] = []
         # creates maze base with walls
@@ -62,10 +80,9 @@ class ExampleHouse(Map):
         door = Door("wooden_door","Sauna Room")
         objects.append((door, Coord(34,15)))
 
-        wine_cellar = WineCellar()
-        door = Door("wooden_door", "Wine Cellar")
-        door.connect_to(wine_cellar,Coord(2,0))
-        objects.append((door, Coord(70,57)))
+        door2 = Door("wooden_door", "Wine Cellar")
+        # objects.append((door2, Coord(53,14)))
+        objects.append((door2, Coord(70,57)))
 
 
         return objects
