@@ -278,6 +278,7 @@ class Attack_potion(Potion):
 
 
 
+<<<<<<< Updated upstream
 
 
 
@@ -291,6 +292,8 @@ class Attack_potion(Potion):
 
 
 
+=======
+>>>>>>> Stashed changes
 class Armor_Set(Defense):
     def __init__(self) -> None:
         super().__init__()
@@ -369,6 +372,7 @@ class Armor_Set(Defense):
 class maze_player(Defense, Subject, RecipientInterface):
     def __init__(self,defense : int, attack_value: int,) -> None:
         super().__init__()
+        self.__init_defense: int = defense
         self.__defense_value: int  = defense
         self.__attack_value = attack_value 
         self.__armor_set: Armor_Set = Armor_Set()
@@ -413,3 +417,11 @@ class maze_player(Defense, Subject, RecipientInterface):
         """return None if potion added
             return new potion if potion is not added"""
         return self.__armor_set.add_potion(potion)
+    
+    def heal(self, heal_amt: int) -> int:
+        """Returns player defense after healing.
+        """
+        self.__defense += heal_amt
+        if self.__init_defense < self.__defense:
+            self.__defense = self.__init_defense
+        return self.__defense
