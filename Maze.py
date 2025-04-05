@@ -3,6 +3,7 @@ from PIL import Image
 from .imports import * 
 from .maze_objects import *
 from .Defense import *
+from .Observers import *
 if TYPE_CHECKING:
     from resources import Resources, get_resource_path
     from coord import Coord
@@ -19,7 +20,24 @@ class ExampleHouse(Map):
             entry_point=Coord(72,63),
             background_tile_image='sandstone3',
         )
+        self.__observers : list[Observer] = []
+
+    def update(self):
+        if (self.__observers.count == 0):
+            self.registerObserver(GladiatorSpawner(room=self,center=Coord(36,36)))
     
+    def registerObserver(self, observer : Observer) -> None:
+        self.__observers.append(observer)
+
+
+    def player_entered(self, player: "HumanPlayer") -> list[Message]:
+        messages = []
+        for observer in self.__observers:
+            observer.update_on_notification("player_entered")
+            #messages += observer.get_messages()
+        return messages
+
+        
     def get_objects(self) -> list[tuple[MapObject, Coord]]:
         objects: list[tuple[MapObject, Coord]] = []
         # creates maze base with walls
@@ -58,9 +76,27 @@ class ExampleHouse(Map):
         Iron_Boots = Boots(5,5,player,self,"Iron Boots")
         objects.append((Iron_Boots, Coord(35,20)))
 
+        ##Doors
+        door = Door("wooden_door","Sauna Room")
+        objects.append((door, Coord(70,57)))
+        #objects.append((door, Coord(34,15)))
+
+        door2 = Door("wooden_door", "Wine Cellar")
+        objects.append((door2, Coord(53,14)))
+        #objects.append((door2, Coord(70,57)))
+
 
         return objects
     
+    def getRandomCoords(self, count : int) -> list[Coord]:
+        coords : list[Coord] = []
+        for i in range (count):
+            x = random.randint(0,72)
+            y = random.randint(0,72)
+            if (self.get_map_objects_at(Coord(x,y)).__class__ == Background):
+                coords.append(Coord(x,y))
+        return coords
+
     def __create_maze_base(self, objects):
         Resource = Resources()
         image = Image.open(Resource.get_resource_path("maze_template4.png", ext_folder=True))
@@ -69,5 +105,4 @@ class ExampleHouse(Map):
             for y in range(73):
                 pixel = rgb_im.getpixel((x,y))
                 if pixel == (255,255,255):
-                    self.add_to_grid(Wall(),Coord(y,x))
-                    # objects.append((Sign(),Coord(x,y)))
+                    self.add_to_grid(Sign(),Coord(y,x))

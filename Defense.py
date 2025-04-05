@@ -17,11 +17,8 @@ if TYPE_CHECKING:
     from tiles.base import MapObject
     from message import *
     from .Maze import ExampleHouse
-    
-
-
-
-
+    from message import Message
+    from tiles.base import Subject
 
 
 
@@ -369,26 +366,7 @@ class Armor_Set(Defense):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-class maze_player(Defense):
+class maze_player(Defense, Subject, RecipientInterface):
     def __init__(self,defense : int, attack_value: int,) -> None:
         super().__init__()
         self.__defense_value: int  = defense
@@ -405,6 +383,8 @@ class maze_player(Defense):
         total_attack_value += self.__armor_set.get_attack_value()
         return total_attack_value
 
+    def add_potion(self, potion: Potion) -> None:
+        self.__armor_set.add_potion
 
     def decrease_defense(self , attack:int)->int:
         """first attack is applied on armor set then 
