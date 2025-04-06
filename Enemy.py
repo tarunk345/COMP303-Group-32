@@ -1,7 +1,6 @@
 from typing import List, TYPE_CHECKING, Literal
 
 from .Defense import *
-from .Maze import ExampleHouse
 from .imports import * 
 if TYPE_CHECKING:
     from Player import HumanPlayer
@@ -121,8 +120,73 @@ class Gladiator(Enemy):
             staring_distance=staring_distance,
             bg_music=bg_music
         )
+        self.__aggro_range = 5
+        self.__attack_cooldown = 0
+        self.__target = None
     
     def get_attack_value(self) -> int:
         return super().get_attack_value()
-    
 
+    def update(self) -> list[Message]:
+        messages = []
+        if self.__attack_cooldown > 0:
+            self.__attack_cooldown -= 1
+            
+        if not self.__target:
+            self.__target = self.__find_nearest_player()
+            
+        if self.__target:
+            messages.extend(self.__move_toward_target())
+            if self.__can_attack():
+                messages.extend(self.__attack_target())
+                
+        return messages
+
+    def __find_nearest_player(self) -> Optional[HumanPlayer]:
+        current_room = self.get_current_room()
+        if not isinstance(current_room, Room):
+            return None
+        
+        nearest = None
+        min_dist = float('inf')
+        my_pos = self.get_position()
+
+        for player in current_room.get_human_players():
+            dist = player.get_position().distance_to(my_pos)
+            if dist < self.__aggro_range and dist < min_dist:
+                nearest = player
+                min_dist = dist
+                
+        return nearest
+
+    def __move_toward_target(self) -> list[Message]:
+        if not self.__target:
+            return []
+            
+        my_pos = self.get_position()
+        target_pos = self.__target.get_position()
+        direction = self.__calculate_move_direction(my_pos, target_pos)
+        
+        # Try to move in calculated direction
+        new_pos = my_pos + direction
+        if self.__can_move_to(new_pos):
+            self.get_current_room().move_object(self, new_pos)
+            return [ServerMessage(None, f"The gladiator moves {direction.name}!")]
+        return []
+    
+    def __calculate_move_direction(self, from_pos: Coord, to_pos: Coord) -> Coord:
+        dx = to_pos.x - from_pos.x
+        dy = to_pos.y - from_pos.y
+        
+        if abs(dx) > abs(dy):
+            return Coord(1 if dx > 0 else -1, 0)
+        else:
+            return Coord(0, 1 if dy > 0 else -1)
+            
+    def __can_attack(self) -> bool:
+        if self.__attack_cooldown > 0 or not self.__target:
+            return False
+            
+        return self.get_position().distance_to(
+            self.__target.get_position()
+        ) <= 1  # Adjacent

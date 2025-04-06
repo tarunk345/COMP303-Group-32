@@ -4,6 +4,7 @@ from .imports import *
 from .maze_objects import *
 from .Defense import *
 from .Observers import *
+from .Enemy import *
 if TYPE_CHECKING:
     from resources import Resources, get_resource_path
     from coord import Coord
@@ -86,8 +87,14 @@ class ExampleHouse(Map):
         #objects.append((door2, Coord(70,57)))
 
         door3 = Door("wooden_door", "Statue Room")
-        #objects.append((door3, Coord(6,70)))
-        objects.append((door3, Coord(70,57)))
+        objects.append((door3, Coord(6,70)))
+        #objects.append((door3, Coord(70,57)))
+
+        door4 = Door("wooden_door", "Armory")
+        objects.append((door4, Coord(70,57)))
+        #objects.append((door4, Coord(34, 33)))
+        
+        #objects.append((Gladiator(), Coord(70,57)))
 
         return objects
     

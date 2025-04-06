@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING
 
 from .imports import *
 from .Defense import Potion, Attack_potion, Defense_potion, maze_player, Defense_type
+from .Enemy import *
 if TYPE_CHECKING:
     from message import *
     from coord import Coord
@@ -46,14 +47,50 @@ class Room(Map, ABC, Subject):
         messages = super().update()
         #if self.enemies and all(e.is_defeated() for e in self.enemies):
             
-
+class GladiatorSpawner(Observer):
+    def __init__(self, center : Coord, room : Map, enemy_count: int = 3):
+        self.enemy_count = enemy_count
+        self.center = center
+        self.gladiators: List[Gladiator] = []
+        self.room = room
+        self.messages = []
+        self.has_spawned = False
     
+    def add_Gladiator(self, gladiator : Gladiator):
+        self.gladiators.append(gladiator)
+        
+    def update_on_notification(self, event: GameEvent):
+        messages = []
+        if (event == "player_entered"):
+            if self.gladiators.count == 0 and not self.has_spawned:
+                self.has_spawned = True
+                messages.extend(self._spawn_gladiators())
+                messages.extend(self.room.send_grid_to_players())
+        return messages
+
+    def _spawn_gladiators(self) -> list[Message]:
+        messages =[]
+        for i in range(self.enemy_count):
+            gladiator = Gladiator()
+            offset = Coord(i-self.enemy_count//2,0)
+            position = self.center + offset
+            try:
+                self.add_Gladiator(gladiator)
+                self.room.__objects.add(gladiator)
+                self.room.add_to_grid(gladiator, position)
+                for player in self.room.get_human_players():
+                    messages.append(ServerMessage(player, f"A gladiator appears at {position}!"))
+                messages.extend(self.room.send_grid_to_players())
+            except Exception as e:
+                for player in self.room.get_human_players():
+                    messages.append(ServerMessage(player,f"Failed to spawn gladiator: {str(e)}"))
+                            
+        return messages   
 
 class Statue(MapObject):
     #Statue
-    def __init__(self, description: str, image_name: str):
-        #Constructor for new statue
-        super().__init__(f'tile/statue/{image_name}', passable=False)
+    def __init__(self, description: str, image_name: str, passable: bool = False, z_index: int = 0) -> None:
+        super().__init__(image_name, passable, z_index)
         self.__description = description
 
     def player_interacted(self, player: HumanPlayer):
@@ -130,8 +167,8 @@ class StatueRoom(Room):
 
         objects.append((Statue(description="Emperor Nero", image_name="statue2"), Coord(1, 14)))
         objects.append((Statue(description="Octavius", image_name="statue3"), Coord(1, 10)))
-        #objects.append((Statue("Anthony", "statue4"), Coord(1, 6)))
-        #objects.append((Statue("Marcus Aurelius", "statue5"), Coord(1, 2)))
+        objects.append((Statue("Anthony", "statue4"), Coord(1, 6)))
+        objects.append((Statue("Marcus Aurelius", "statue5"), Coord(1, 2)))
 
         return objects
 
@@ -139,14 +176,17 @@ class WineCellar(Room):
     def __init__(self):
         super().__init__(name="Wine Cellar", size=(5,9), entry_point=Coord(53,14), background_tile="cobblestone")
 
-    # def update(self):
-    #     if self._observers.count == 0:
-    #         self.registerObserver(GladiatorSpawner(Coord(3,4),self))
+    def update(self):
+        if self._observers.count == 0:
+             self.registerObserver(GladiatorSpawner(Coord(3,4),self))
+        
 
     def player_entered(self, player: "HumanPlayer") -> list[Message]:
+        messages = []
+        messages.extend([ServerMessage(player, f"You have entered the Wine Cellar.")])
         for observer in self._observers:
-            observer.update_on_notification
-        return [ServerMessage(player, f"You have entered the Wine Cellar.")]
+            messages.extend(observer.update_on_notification('player_entered'))
+        return messages
     
     def get_objects(self) -> list[tuple[MapObject, Coord]]:
         objects: list[tuple[MapObject, Coord]] = []
@@ -154,8 +194,7 @@ class WineCellar(Room):
         door = Door("wooden_door", "Example House", True)
         objects.append((door,Coord(2,0)))
 
-        barrel1 = Barrel()
-        objects.append((barrel1, Coord(0,0)))
+        objects.append((Barrel(), Coord(0,0)))
         objects.append((Barrel(), Coord(0,1)))
         objects.append((Barrel(),Coord(0,2)))
         objects.append((Barrel(),Coord(0,3)))
@@ -176,8 +215,66 @@ class WineCellar(Room):
 
 
         return objects
+
+class ArmorStand(MapObject):
+    def __init__(self, image_name: str = "armorstand", passable: bool = False, z_index: int = 0) -> None:
+        super().__init__(image_name, passable, z_index)
+
+class ArrowStand(MapObject):
+    def __init__(self, image_name: str = "arrowstand", passable: bool = False, z_index: int = 0) -> None:
+        super().__init__(image_name, passable, z_index)
+
+class Target(MapObject):
+    def __init__(self, image_name: str = "target", passable: bool = False, z_index: int = 0) -> None:
+        super().__init__(image_name, passable, z_index)
+
+class Armory(Room):
+    def __init__(self):
+        super().__init__(name="Armory",size=(13,11), entry_point=Coord(0,2), background_tile="cobblestone") 
+
+    def player_entered(self, player: "HumanPlayer") -> list[Message]:
+        messages = []
+        messages.extend([ServerMessage(player, f"You have entered the Wine Cellar.")])
+        for observer in self._observers:
+            messages.extend(observer.update_on_notification('player_entered'))
+        return messages
     
-   
+    def get_objects(self) -> list[tuple[MapObject, Coord]]:
+        objects : list[tuple[MapObject, Coord]] = []
+
+        door = Door("wooden_door", "Example House", True)
+        objects.append((door,Coord(0,2)))
+        objects.append((ArmorStand(), Coord(0,0)))    
+        objects.append((ArmorStand(), Coord(3,0)))    
+        objects.append((ArmorStand(), Coord(5,0)))    
+        objects.append((ArmorStand(), Coord(7,0)))    
+        objects.append((ArmorStand(), Coord(9,0)))    
+        objects.append((ArrowStand(), Coord(0,3)))
+
+        objects.append((ArmorStand(), Coord(3,3)))    
+        objects.append((ArmorStand(), Coord(5,3)))    
+        objects.append((ArmorStand(), Coord(7,3)))    
+        objects.append((ArmorStand(), Coord(9,3)))
+
+        objects.append((ArmorStand(), Coord(3,6)))    
+        objects.append((ArmorStand(), Coord(5,6)))    
+        objects.append((ArmorStand(), Coord(7,6)))    
+        objects.append((ArmorStand(), Coord(9,6)))    
+
+        objects.append((ArmorStand(), Coord(0,9)))    
+        objects.append((ArmorStand(), Coord(3,9)))    
+        objects.append((ArmorStand(), Coord(5,9)))    
+        objects.append((ArmorStand(), Coord(7,9)))    
+        objects.append((ArmorStand(), Coord(9,9)))
+        
+        objects.append((Target(), Coord(11,1)))
+        objects.append((Target(), Coord(11,4)))
+        objects.append((Target(), Coord(11,7)))
+        objects.append((Target(), Coord(11,10)))
+        
+        
+        return objects
+
 class FinalBossRoom(Room):
     def __init__(self):
         super().__init__(name="FinalBossRoom",size=(10,30),entry_point=Coord(0,23),background_tile="sand")
