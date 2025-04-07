@@ -87,7 +87,7 @@ class SaunaRoom(Room):
     
     def get_objects(self) -> list[tuple[MapObject, Coord]]:
         objects: list[tuple[MapObject,Coord]] = []
-        door = Door("wooden_door", "Example House",True)
+        door = Door("wooden_door", "Example House")
         objects.append((door,Coord(18,15)))
 
         for x in range(0,17,2):
@@ -139,7 +139,7 @@ class WineCellar(Room):
     def get_objects(self) -> list[tuple[MapObject, Coord]]:
         objects: list[tuple[MapObject, Coord]] = []
         
-        door = Door("wooden_door", "Example House", True)
+        door = Door("wooden_door", "Example House")
         objects.append((door,Coord(2,0)))
 
         barrel1 = Barrel()
