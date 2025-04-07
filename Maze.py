@@ -13,6 +13,7 @@ if TYPE_CHECKING:
     from tiles.map_objects import *
 
 class ExampleHouse(Map):
+    MAIN_ENTRANCE = True
     def __init__(self) -> None:
         super().__init__(
             name="Maze",
@@ -21,21 +22,10 @@ class ExampleHouse(Map):
             entry_point=Coord(72,63),
             background_tile_image='sandstone3',
         )
-        self.__observers : list[Observer] = []
-
-    def update(self):
-        if (self.__observers.count == 0):
-            self.registerObserver(GladiatorSpawner(room=self,center=Coord(36,36)))
-    
-    def registerObserver(self, observer : Observer) -> None:
-        self.__observers.append(observer)
 
 
     def player_entered(self, player: "HumanPlayer") -> list[Message]:
         messages = []
-        for observer in self.__observers:
-            observer.update_on_notification("player_entered")
-            #messages += observer.get_messages()
         return messages
 
         
@@ -44,7 +34,7 @@ class ExampleHouse(Map):
         # creates maze base with walls
         self.__create_maze_base(objects)
         # add a door
-        door = Door('int_entrance', linked_room="Trottier Town")
+        door = Door('int_entrance', linked_room="Trottier Town", is_main_entrance=True)
         
         objects.append((door, Coord(72,63)))
         player = maze_player(5,5)
@@ -83,16 +73,16 @@ class ExampleHouse(Map):
         objects.append((door, Coord(34,15)))
 
         door2 = Door("wooden_door", "Wine Cellar")
-        objects.append((door2, Coord(53,14)))
-        #objects.append((door2, Coord(70,57)))
+        #objects.append((door2, Coord(53,14)))
+        objects.append((door2, Coord(70,57)))
 
         door3 = Door("wooden_door", "Statue Room")
         objects.append((door3, Coord(6,70)))
         #objects.append((door3, Coord(70,57)))
-
+        
         door4 = Door("wooden_door", "Armory")
-        objects.append((door4, Coord(70,57)))
-        #objects.append((door4, Coord(34, 33)))
+        #objects.append((door4, Coord(70,57)))
+        objects.append((door4, Coord(34, 33)))
         
         #objects.append((Gladiator(), Coord(70,57)))
 

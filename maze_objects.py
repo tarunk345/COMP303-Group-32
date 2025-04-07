@@ -21,16 +21,11 @@ class Room(Map, ABC, Subject):
         #Constructor for new room
         super().__init__(name=name, 
                          description="", size=size, entry_point=entry_point, background_tile_image=background_tile)
-        self.__objects: list[tuple[MapObject, Coord]] = []
         self._observers: list[Observer] = []
         self.enemies_defeated = False
         self._entrance_door = None
         self._exit_door = None
         self._player_entered = False
-
-    def add_object(self, obj: MapObject, position: Coord) -> None:
-        #Add a new object in the room
-        self.__objects.append((obj, position))
 
     def get_objects(self) -> list[tuple[MapObject, Coord]]:
         #Return all objects in the room
@@ -61,7 +56,7 @@ class GladiatorSpawner(Observer):
         
     def update_on_notification(self, event: GameEvent):
         messages = []
-        if (event == "player_entered"):
+        if (event == 'player_entered'):
             if self.gladiators.count == 0 and not self.has_spawned:
                 self.has_spawned = True
                 messages.extend(self._spawn_gladiators())
@@ -118,7 +113,6 @@ class HotTub(MapObject):
 class SaunaRoom(Room):
     def __init__(self): #, name: str, size: tuple[int, int], entry_point: Coord, background_tile: str = "floor"):
         super().__init__(name="Sauna Room", size=(19,17), entry_point=Coord(34,15), background_tile="saunatile")
-        self.__heat_level = 10
     
     def update(self):
         players : list[HumanPlayer] = self.get_human_players()
@@ -149,9 +143,6 @@ class SaunaRoom(Room):
                 objects.append((Column(image_name="columntop"), Coord(18,x)))
         return objects
     
-
-    #add a taking damage method in here
-
 class StatueRoom(Room):
     def __init__(self):
         super().__init__(name="Statue Room", size=(5,18), entry_point=Coord(6,70), background_tile="sandstone")
@@ -177,8 +168,10 @@ class WineCellar(Room):
         super().__init__(name="Wine Cellar", size=(5,9), entry_point=Coord(53,14), background_tile="cobblestone")
 
     def update(self):
+        messages = []
         if self._observers.count == 0:
-             self.registerObserver(GladiatorSpawner(Coord(3,4),self))
+             self.registerObserver(GladiatorSpawner(Coord(2,4),self))
+        return messages
         
 
     def player_entered(self, player: "HumanPlayer") -> list[Message]:
@@ -223,6 +216,9 @@ class ArmorStand(MapObject):
 class ArrowStand(MapObject):
     def __init__(self, image_name: str = "arrowstand", passable: bool = False, z_index: int = 0) -> None:
         super().__init__(image_name, passable, z_index)
+    
+    def player_interacted(self, player: maze_player) -> list[Message]:
+        return [DialogueMessage(self, player, f"Arrow Stand: Coming Soon!", self.get_image_name())]
 
 class Target(MapObject):
     def __init__(self, image_name: str = "target", passable: bool = False, z_index: int = 0) -> None:
@@ -271,7 +267,6 @@ class Armory(Room):
         objects.append((Target(), Coord(11,4)))
         objects.append((Target(), Coord(11,7)))
         objects.append((Target(), Coord(11,10)))
-        
         
         return objects
 
