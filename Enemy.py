@@ -1,7 +1,7 @@
 from typing import List, TYPE_CHECKING, Literal
 
 
-from .Maze import ExampleHouse,player
+from .Maze import player
 from .Defense import *
 from .imports import * 
 if TYPE_CHECKING:
@@ -36,7 +36,7 @@ class Enemy(NPC, CharacterMapObject):
             
             return remaining_damage
         else:
-            self.defense -= attack
+            self.__defense -= attack
             return 0  # No remaining damage
 
     def player_moved(self, player: "HumanPlayer") -> List[Message]:
@@ -47,7 +47,7 @@ class Enemy(NPC, CharacterMapObject):
             return []
 
         dist = self._current_position.distance(player.get_current_position())
-        if dist <= self.__staring_distance:
+        if dist <= self._staring_distance:
 
             attack_messages = self.attack()
             messages.extend(attack_messages)
@@ -65,11 +65,6 @@ class Enemy(NPC, CharacterMapObject):
     def player_interacted(self, player: "HumanPlayer") -> List[Message]:
         self.decrease_defense(self.__attack_damage)
         maze = self.__maze_player.get_maze()
-        if self.__defense == 0:
-            # return [DialogueMessage(self, player, f"{self.get_name()} attacks you for {self.__attack_damage} damage!", self.get_image())]
-            maze.remove_player(self)
-            return [DialogueMessage(self, player,self.get_name() + "died!",self.get_image_name())]
-        
         return [DialogueMessage(self, player,self.get_name() + "received damage! \nremaining Health:"+str(self.__defense),self.get_image_name())] 
        
 class Minotaur(Enemy):
@@ -130,69 +125,69 @@ class Gladiator(Enemy):
         self.__attack_cooldown = 0
         self.__target = None
     
-    def get_attack_value(self) -> int:
-        return super().get_attack_value()
+    def get_attack_damage(self) -> int:
+        return super().get_attack_damage()
 
-    def update(self) -> list[Message]:
-        messages = []
-        if self.__attack_cooldown > 0:
-            self.__attack_cooldown -= 1
+    # def update(self) -> list[Message]:
+    #     messages = []
+    #     if self.__attack_cooldown > 0:
+    #         self.__attack_cooldown -= 1
             
-        if not self.__target:
-            self.__target = self.__find_nearest_player()
+    #     if not self.__target:
+    #         self.__target = self.__find_nearest_player()
             
-        if self.__target:
-            messages.extend(self.__move_toward_target())
-            if self.__can_attack():
-                messages.extend(self.__attack_target())
+    #     if self.__target:
+    #         messages.extend(self.__move_toward_target())
+    #         if self.__can_attack():
+    #             messages.extend(self.attack())
                 
-        return messages
+    #     return messages
 
-    def __find_nearest_player(self) -> Optional[HumanPlayer]:
-        current_room = self.get_current_room()
-        if not isinstance(current_room, Room):
-            return None
+    # def __find_nearest_player(self) -> Optional[HumanPlayer]:
+    #     current_room = self.get_current_room()
+    #     if not isinstance(current_room, Room):
+    #         return None
         
-        nearest = None
-        min_dist = float('inf')
-        my_pos = self.get_position()
+    #     nearest = None
+    #     min_dist = float('inf')
+    #     my_pos = self.get_position()
 
-        for player in current_room.get_human_players():
-            dist = player.get_position().distance_to(my_pos)
-            if dist < self.__aggro_range and dist < min_dist:
-                nearest = player
-                min_dist = dist
+    #     for player in current_room.get_human_players():
+    #         dist = player.get_position().distance_to(my_pos)
+    #         if dist < self.__aggro_range and dist < min_dist:
+    #             nearest = player
+    #             min_dist = dist
                 
-        return nearest
+    #     return nearest
 
-    def __move_toward_target(self) -> list[Message]:
-        if not self.__target:
-            return []
+    # def __move_toward_target(self) -> list[Message]:
+    #     if not self.__target:
+    #         return []
             
-        my_pos = self.get_position()
-        target_pos = self.__target.get_position()
-        direction = self.__calculate_move_direction(my_pos, target_pos)
+    #     my_pos = self.get_position()
+    #     target_pos = self.__target.get_position()
+    #     direction = self.__calculate_move_direction(my_pos, target_pos)
         
-        # Try to move in calculated direction
-        new_pos = my_pos + direction
-        if self.__can_move_to(new_pos):
-            self.get_current_room().move_object(self, new_pos)
-            return [ServerMessage(None, f"The gladiator moves {direction.name}!")]
-        return []
+    #     # Try to move in calculated direction
+    #     new_pos = my_pos + direction
+    #     if self.__can_move_to(new_pos):
+    #         self.get_current_room().move_to(self, new_pos)
+    #         return [ServerMessage(None, f"The gladiator moves {direction.name}!")]
+    #     return []
     
-    def __calculate_move_direction(self, from_pos: Coord, to_pos: Coord) -> Coord:
-        dx = to_pos.x - from_pos.x
-        dy = to_pos.y - from_pos.y
+    # def __calculate_move_direction(self, from_pos: Coord, to_pos: Coord) -> Coord:
+    #     dx = to_pos.x - from_pos.x
+    #     dy = to_pos.y - from_pos.y
         
-        if abs(dx) > abs(dy):
-            return Coord(1 if dx > 0 else -1, 0)
-        else:
-            return Coord(0, 1 if dy > 0 else -1)
+    #     if abs(dx) > abs(dy):
+    #         return Coord(1 if dx > 0 else -1, 0)
+    #     else:
+    #         return Coord(0, 1 if dy > 0 else -1)
             
-    def __can_attack(self) -> bool:
-        if self.__attack_cooldown > 0 or not self.__target:
-            return False
+    # def __can_attack(self) -> bool:
+    #     if self.__attack_cooldown > 0 or not self.__target:
+    #         return False
             
-        return self.get_position().distance_to(
-            self.__target.get_position()
-        ) <= 1  # Adjacent
+    #     return self.get_position().distance_to(
+    #         self.__target.get_position()
+        # ) <= 1  # Adjacent
