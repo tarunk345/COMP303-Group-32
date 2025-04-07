@@ -4,6 +4,7 @@ from .imports import *
 from .maze_objects import *
 from .Defense import *
 from .Observers import *
+from .Enemy import *
 if TYPE_CHECKING:
     from resources import Resources, get_resource_path
     from coord import Coord
@@ -14,6 +15,7 @@ if TYPE_CHECKING:
 player = maze_player(5,5)
 
 class ExampleHouse(Map):
+    MAIN_ENTRANCE = True
     def __init__(self) -> None:
         super().__init__(
             name="Maze",
@@ -35,9 +37,6 @@ class ExampleHouse(Map):
 
     def player_entered(self, player: "HumanPlayer") -> list[Message]:
         messages = []
-        for observer in self.__observers:
-            observer.update_on_notification("player_entered")
-            #messages += observer.get_messages()
         return messages
 
         
@@ -46,7 +45,7 @@ class ExampleHouse(Map):
         # creates maze base with walls
         self.__create_maze_base(objects)
         # add a door
-        door = Door('int_entrance', linked_room="Trottier Town")
+        door = Door('int_entrance', linked_room="Trottier Town", is_main_entrance=True)
         
         objects.append((door, Coord(72,63)))
         
@@ -82,13 +81,22 @@ class ExampleHouse(Map):
 
         ##Doors
         door = Door("wooden_door","Sauna Room")
-        objects.append((door, Coord(70,57)))
-        #objects.append((door, Coord(34,15)))
+        #objects.append((door, Coord(70,57)))
+        objects.append((door, Coord(34,15)))
 
         door2 = Door("wooden_door", "Wine Cellar")
-        objects.append((door2, Coord(53,14)))
-        #objects.append((door2, Coord(70,57)))
+        #objects.append((door2, Coord(53,14)))
+        objects.append((door2, Coord(70,57)))
 
+        door3 = Door("wooden_door", "Statue Room")
+        objects.append((door3, Coord(6,70)))
+        #objects.append((door3, Coord(70,57)))
+        
+        door4 = Door("wooden_door", "Armory")
+        #objects.append((door4, Coord(70,57)))
+        objects.append((door4, Coord(34, 33)))
+        
+        #objects.append((Gladiator(), Coord(70,57)))
 
         return objects
     

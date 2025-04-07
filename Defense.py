@@ -129,32 +129,15 @@ class Armor(Defense, MapObject):
 class Pants(Armor):
     def __init__(self, defense_value: int, attack_value: int, player: "maze_player", maze: "ExampleHouse", image_name: str) -> None:
         super().__init__(defense_value, attack_value, Defense_type.PANTS, player,maze, image_name)
-    
-
-
-
 class Chest_Plate(Armor):
     def __init__(self, defense_value: int, attack_value: int, player: "maze_player", maze: "ExampleHouse", image_name: str) -> None:
         super().__init__(defense_value, attack_value, Defense_type.CHEST_PLATE, player,maze, image_name)
-    
-
-
 class Helmet(Armor):
     def __init__(self, defense_value: int, attack_value: int, player: "maze_player", maze: "ExampleHouse", image_name: str) -> None:
         super().__init__(defense_value, attack_value, Defense_type.HELMET, player,maze, image_name)
-
 class Boots(Armor):
     def __init__(self, defense_value: int, attack_value: int, player: "maze_player", maze: "ExampleHouse", image_name: str) -> None:
         super().__init__(defense_value, attack_value, Defense_type.BOOTS, player,maze, image_name)
-
-
-
-
-
-
-
-
-
 
 
 
@@ -272,25 +255,6 @@ class Attack_potion(Potion):
     
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class Armor_Set(Defense):
     def __init__(self) -> None:
         super().__init__()
@@ -369,6 +333,7 @@ class Armor_Set(Defense):
 class maze_player(Defense, Subject, RecipientInterface):
     def __init__(self,defense : int, attack_value: int,) -> None:
         super().__init__()
+        self.__init_defense: int = defense
         self.__defense_value: int  = defense
         self.__attack_value = attack_value 
         self.__armor_set: Armor_Set = Armor_Set()
@@ -420,3 +385,11 @@ class maze_player(Defense, Subject, RecipientInterface):
         """return None if potion added
             return new potion if potion is not added"""
         return self.__armor_set.add_potion(potion)
+    
+    def heal(self, heal_amt: int) -> int:
+        """Returns player defense after healing.
+        """
+        self.__defense += heal_amt
+        if self.__init_defense < self.__defense:
+            self.__defense = self.__init_defense
+        return self.__defense
