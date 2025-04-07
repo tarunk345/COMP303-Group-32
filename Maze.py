@@ -99,6 +99,8 @@ class ExampleHouse(Map):
 
     def __create_maze_base(self, objects):
         Resource = Resources()
+        template_path = Resource.get_resource_path("maze_template4.png", ext_folder=True)
+        print({template_path})
         image = Image.open(Resource.get_resource_path("maze_template4.png", ext_folder=True))
         rgb_im = image.convert('RGB')
         for x in range(73):
