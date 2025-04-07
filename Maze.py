@@ -11,6 +11,8 @@ if TYPE_CHECKING:
     from tiles.base import MapObject
     from tiles.map_objects import *
 
+player = maze_player(5,5)
+
 class ExampleHouse(Map):
     def __init__(self) -> None:
         super().__init__(
@@ -21,6 +23,7 @@ class ExampleHouse(Map):
             background_tile_image='sandstone3',
         )
         self.__observers : list[Observer] = []
+        player = maze_player(5,5)
 
     def update(self):
         if (self.__observers.count == 0):
@@ -46,7 +49,8 @@ class ExampleHouse(Map):
         door = Door('int_entrance', linked_room="Trottier Town")
         
         objects.append((door, Coord(72,63)))
-        player = maze_player(5,5)
+        
+        player.set_maze(self)
         Gold_chest_plate = Chest_Plate(20,20,player,self,"Gold Chest Plate")
         objects.append((Gold_chest_plate, Coord(60,63)))
         Gold_Helmet = Helmet(20,20,player,self,"Gold Helmet")
