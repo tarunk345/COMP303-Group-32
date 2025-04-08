@@ -156,6 +156,14 @@ class SaunaRoom(Room):
         objects.append((HotTub(),Coord(10,3)))
         objects.append((HotTub(),Coord(10,10)))
 
+        objects.append((Gladiator(), Coord(8,8)))
+        objects.append((Gladiator(), Coord(8,4)))
+        objects.append((Gladiator(), Coord(8,12)))
+
+        objects.append((Gladiator(), Coord(15,8)))
+        objects.append((Gladiator(), Coord(15,4)))
+        objects.append((Gladiator(), Coord(15,12)))
+
         for x in range(0,17,2):
             objects.append((Column(), Coord(x,0)))
             objects.append((Column(),Coord(0,x)))
@@ -189,6 +197,11 @@ class StatueRoom(Room):
         objects.append((Statue("Anthony", "statue4"), Coord(1, 6)))
         objects.append((Statue("Marcus Aurelius", "statue5"), Coord(1, 2)))
 
+        objects.append((Gladiator(), Coord(2,12)))
+        objects.append((Gladiator(), Coord(2,8)))
+        objects.append((Gladiator(), Coord(2,4)))
+
+
         return objects
 
 class WineCellar(Room):
@@ -219,6 +232,9 @@ class WineCellar(Room):
         
         door = Door("wooden_door", "Example House")
         objects.append((door,Coord(2,0)))
+
+        objects.append((Gladiator(), Coord(1,4)))
+        objects.append((Gladiator(), Coord(2,4)))
 
         objects.append((Barrel(), Coord(0,0)))
         objects.append((Barrel(), Coord(0,1)))
@@ -306,6 +322,15 @@ class Armory(Room):
         objects.append((Target(), Coord(11,4)))
         objects.append((Target(), Coord(11,7)))
         objects.append((Target(), Coord(11,10)))
+
+        objects.append((Gladiator(), Coord(8,8)))
+        objects.append((Gladiator(), Coord(8,4)))
+        objects.append((Gladiator(), Coord(6,8)))
+        objects.append((Gladiator(), Coord(4,8)))
+        objects.append((Gladiator(), Coord(10,8)))
+        objects.append((Gladiator(), Coord(6,4)))
+
+
         
         return objects
 
@@ -326,14 +351,13 @@ class FinalBossRoom(Room):
         for observer in self._observers:
             messages.extend(observer.update_on_notification('player_entered'))
         return messages
-    
-    def update(self):
-        #if 
-        pass
+
 
     def get_objects(self) -> list[tuple[MapObject, Coord]]:
         objects : list[tuple[MapObject, Coord]] = []
         
         objects.append((self._entrance_door,Coord(9,1)))
+
+        objects.append((Minotaur().get_instance(), Coord(5, 10)))
 
         return objects

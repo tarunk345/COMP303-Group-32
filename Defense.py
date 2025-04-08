@@ -96,7 +96,7 @@ class maze_player(Defense, Subject, RecipientInterface):
         
         attack = self.__armor_set.decrease_defense(attack)
         if attack < self.__defense_value:
-            self.defense = self.defense - attack
+            self.__defense_value = self.__defense_value - attack
             return 0
 
         self.__defense_value = 0
