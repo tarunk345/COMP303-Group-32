@@ -153,7 +153,7 @@ class StatueRoom(Room):
     def get_objects(self) -> list[tuple[MapObject, Coord]]:
         objects : list[tuple[MapObject,Coord]] = []
 
-        door = Door("wooden_door", "Example House",True)
+        door = Door("wooden_door", "Example House")
         objects.append((door,Coord(4,17)))
 
         objects.append((Statue(description="Emperor Nero", image_name="statue2"), Coord(1, 14)))
@@ -238,7 +238,7 @@ class Armory(Room):
     def get_objects(self) -> list[tuple[MapObject, Coord]]:
         objects : list[tuple[MapObject, Coord]] = []
 
-        door = Door("wooden_door", "Example House", True)
+        door = Door("wooden_door", "Example House")
         objects.append((door,Coord(0,2)))
         objects.append((ArmorStand(), Coord(0,0)))    
         objects.append((ArmorStand(), Coord(3,0)))    
