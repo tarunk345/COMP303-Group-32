@@ -34,14 +34,14 @@ class ExampleHouse(Map):
         messages = []
         return messages
 
-    def add_gladiator(self, coord : Coord) -> None:
-        self.__gladiators
+    def add_gladiator(self) -> None:
+        self.__gladiators.append(Gladiator())
 
     def update(self) -> list[Message]:
         messages = []
-        list : list[HumanPlayer] = self.get_human_players()
-        if list.__len__() >= 2:
-            self.remove_player(list[1])
+        playerlist : list[HumanPlayer] = self.get_human_players()
+        if playerlist.__len__() >= 2:
+            self.remove_player(playerlist[1])
             
         for gladiator in self.__gladiators:
             if gladiator.is_defeated():
@@ -105,8 +105,13 @@ class ExampleHouse(Map):
         door4 = Door("wooden_door", "Armory")
         #objects.append((door4, Coord(70,57)))
         objects.append((door4, Coord(34, 33)))
+
+        door5 = Door("golden_door", "Final Boss Room")
+        objects.append((door5, Coord(70,57)))
+        #objects.append((door5, Coord(0,23)))
+
         
-        objects.append((Gladiator(), Coord(70,57)))
+        #objects.append((Gladiator(), Coord(70,57)))
 
         return objects
     
