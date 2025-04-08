@@ -140,4 +140,4 @@ class ExampleHouse(Map):
             for y in range(73):
                 pixel = rgb_im.getpixel((x,y))
                 if pixel == (255,255,255):
-                    self.add_to_grid(Sign(),Coord(y,x))
+                    self.add_to_grid(Wall(),Coord(y,x))
