@@ -278,7 +278,7 @@ class Potion(Defense, MapObject):
     
 class Defense_potion(Potion):
 
-    def __init__(self,multiplier: int, defense_type: Defense_type, player: "maze_player", maze: "ExampleHouse", image_name: str) -> None:
+    def __init__(self,multiplier: int, player: "maze_player", maze: "ExampleHouse", image_name: str) -> None:
         super().__init__(multiplier, Defense_type.DEFENSE_POTION, player, maze, image_name)
     
          
@@ -300,7 +300,7 @@ class Defense_potion(Potion):
 
 class Attack_potion(Potion):
 
-    def __init__(self, multiplier: int, defense_type: Defense_type, player: "maze_player", maze: "ExampleHouse", image_name: str) -> None:
+    def __init__(self, multiplier: int, player: "maze_player", maze: "ExampleHouse", image_name: str) -> None:
         super().__init__(multiplier, Defense_type.ATTACK_POTION, player, maze, image_name)
 
     def get_attack_value(self) -> int:
