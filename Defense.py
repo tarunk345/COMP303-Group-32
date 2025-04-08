@@ -260,8 +260,9 @@ class Potion(Defense, MapObject):
         attack = attack - self.__defense_value
         self.__defense_value = 0
         return attack
+    
 
-    def player_entered(self, player: "HumanPlayer") -> list[Message]:
+    def player_interacted(self, player: "HumanPlayer") -> list[Message]:
         """if potion not added put the the potion back on grid and return pick text
             if potion added then update attack value of player,update the fields of potion and return not pick text"""
 
@@ -286,8 +287,8 @@ class Defense_potion(Potion):
         super().set_fields()
         self.set_defense_value(self.get_multiplier()*self.get_armor().get_defense_value())
 
-    def player_entered(self, player: "HumanPlayer") -> list[Message]:
-        message = super().player_entered(player)
+    def player_interacted(self, player: "HumanPlayer") -> list[Message]:
+        message = super().player_interacted(player)
         if message != []:
             return message
         
@@ -306,8 +307,8 @@ class Attack_potion(Potion):
     def get_attack_value(self) -> int:
         return self.get_multiplier() * self.get_armor().get_attack_value()
 
-    def player_entered(self, player: "HumanPlayer") -> list[Message]:
-        message = super().player_entered(player)
+    def player_interacted(self, player: "HumanPlayer") -> list[Message]:
+        message = super().player_interacted(player)
         if message != []:
             return message
         
@@ -386,12 +387,16 @@ class Armor_Set(Defense):
         if len(self.__list_armors) == 0:
             return potion
         
-        armor = random.choice(self.__list_armors)
-        potion.set_armor(armor)
-        self.__list_armors.remove(armor)
-        self.__list_armors.append(potion)
+        for armor in self.__list_armors:
+            if isinstance(armor,(Armor)):
+                potion.set_armor(armor)
+                self.__list_armors.remove(armor)
+                self.__list_armors.append(potion)
+                return None
+
+        
     
-        return None
+        return potion
     
 player = maze_player(11,5)    
 
@@ -403,7 +408,7 @@ player = maze_player(11,5)
     
    
 
-#     def player_entered(self, player:"HumanPlayer") -> list[Message]:
+#     def player_interacted(self, player:"HumanPlayer") -> list[Message]:
 #         # if player.get_state("maze_player") is None:
 #         player.set_state("maze_player",maze_player(5,5))
 #         return [DialogueMessage(self, player, "Welcome to The Maze!", self.get_name())]
