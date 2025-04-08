@@ -304,7 +304,7 @@ class Attack_potion(Potion):
         super().__init__(multiplier, Defense_type.ATTACK_POTION, player, maze, image_name)
 
     def get_attack_value(self) -> int:
-        return self.get_multiplier() * self.get_attack_value()
+        return self.get_multiplier() * self.get_armor().get_attack_value()
 
     def player_entered(self, player: "HumanPlayer") -> list[Message]:
         message = super().player_entered(player)
@@ -314,7 +314,7 @@ class Attack_potion(Potion):
         armor = self.get_armor()
         image_name = self.get_image_name()
         attack_increase = (self.get_multiplier()*armor.get_attack_value()) - armor.get_attack_value()
-        pick_text = 'You picked up the '+ self.get_image_name() +'! It is applied to ' + str(self.__armor)+ '.\nAttack increased by ' + str(attack_increase)+'!'
+        pick_text = 'You picked up the '+ self.get_image_name() +'! It is applied to ' + str(armor)+ '.\nAttack increased by ' + str(attack_increase)+'!'
         self.set_fields() 
         return [DialogueMessage(self, player, pick_text, image_name)]
     

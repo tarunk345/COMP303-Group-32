@@ -119,6 +119,10 @@ class ExampleHouse(Map):
         objects.append((Gladiator(), Coord(59,40)))
         objects.append((Gladiator(), Coord(46,7)))
 
+
+        objects.append((Attack_potion(2, defense_type=Defense_type.ATTACK_POTION, player=player, maze=self, image_name='attackpotion'), Coord(71,56)))
+        objects.append((Attack_potion(3, defense_type=Defense_type.ATTACK_POTION, player=player, maze=self, image_name='attackpotion'), Coord(70,49)))
+        objects.append((Defense_potion(2, defense_type=Defense_type.DEFENSE_POTION, player=player, maze=self, image_name='defensepotion'), Coord(69,49)))
        
 
         return objects
