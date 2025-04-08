@@ -96,7 +96,7 @@ class Minotaur(Enemy):
             raise Exception("Minotaur is a singleton")
 
         super().__init__(
-            defense=100,
+            defense=30,
             attack_damage=25,
             name="Minotaur",
             image="minotaur",  # Replace with your actual image name
@@ -106,23 +106,23 @@ class Minotaur(Enemy):
         )
 
     def player_interacted(self, player: "HumanPlayer") -> List[Message]:
-        self.decrease_defense(self.__maze_player.get_attack_value())
+        self.decrease_defense(self.get_maze_player().get_attack_value())
       
-        if self.__defense == 0:
+        if self.get_defense_value() == 0:
             # return [DialogueMessage(self, player, f"{self.get_name()} attacks you for {self.__attack_damage} damage!", self.get_image())]
             player.get_current_room().remove_from_grid(self,self.get_current_position())
-            player.change_room(self.__maze_player.get_maze())
+            player.change_room(self.get_maze_player().get_maze())
             player.move_to(Coord(70,62))
             return [DialogueMessage(self, player,self.get_name() + " died! You have cleared the Maze!",self.get_image_name())]
         
         if self.attack() > 0:
             # player.change_room("Trottier Town")
             # player.update_position(,self.__maze_player.get_maze())
-            player.change_room(self.__maze_player.get_maze())
+            player.change_room(self.get_maze_player().get_maze())
             player.move_to(Coord(70,62))
             return [DialogueMessage(self, player,player.get_name() + "died!",self.get_image_name())]
 
-        return [DialogueMessage(self, player,self.get_name() + " received damage! \n"+self.get_name()+" remaining Health:"+str(self.__defense)+"\n"+player.get_name() + " received damage! \n"+player.get_name()+" remaining Health:"+str(self.get_maze_player().get_defense_value()),self.get_image_name())] 
+        return [DialogueMessage(self, player,self.get_name() + " received damage! \n"+self.get_name()+" remaining Health:"+str(self.get_defense_value())+"\n"+player.get_name() + " received damage! \n"+player.get_name()+" remaining Health:"+str(self.get_maze_player().get_defense_value()),self.get_image_name())] 
 
     # def player_interacted(self, player: "HumanPlayer") -> List[DialogueMessage]:
     #     messages = [
