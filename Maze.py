@@ -1,11 +1,12 @@
 from typing import TYPE_CHECKING
 from PIL import Image
+
 from .imports import * 
 from .maze_objects import *
 from .Defense import *
-from .Observers import *
 from .Enemy import *
 if TYPE_CHECKING:
+    from message import Message
     from resources import Resources, get_resource_path
     from coord import Coord
     from maps.base import Map
@@ -24,21 +25,30 @@ class ExampleHouse(Map):
             entry_point=Coord(72,63),
             background_tile_image='sandstone3',
         )
-        self.__observers : list[Observer] = []
         player = maze_player(5,5)
+        player.set_maze(self)
 
-    def update(self):
-        if (self.__observers.count == 0):
-            self.registerObserver(GladiatorSpawner(room=self,center=Coord(36,36)))
-    
-    def registerObserver(self, observer : Observer) -> None:
-        self.__observers.append(observer)
-
+        self.__gladiators : list[Gladiator] = []
 
     def player_entered(self, player: "HumanPlayer") -> list[Message]:
         messages = []
         return messages
 
+    def add_gladiator(self, coord : Coord) -> None:
+        self.__gladiators
+
+    def update(self) -> list[Message]:
+        messages = []
+        list : list[HumanPlayer] = self.get_human_players()
+        if list.__len__() >= 2:
+            self.remove_player(list[1])
+            
+        for gladiator in self.__gladiators:
+            if gladiator.is_defeated():
+                self.remove_from_grid(gladiator, gladiator.get_position())
+                self.send_grid_to_players()
+                messages.extend("Gladiator defeated!")
+        return messages
         
     def get_objects(self) -> list[tuple[MapObject, Coord]]:
         objects: list[tuple[MapObject, Coord]] = []
@@ -90,8 +100,8 @@ class ExampleHouse(Map):
         objects.append((door, Coord(34,15)))
 
         door2 = Door("wooden_door", "Wine Cellar")
-        #objects.append((door2, Coord(53,14)))
-        objects.append((door2, Coord(70,57)))
+        objects.append((door2, Coord(53,14)))
+        #objects.append((door2, Coord(70,57)))
 
         door3 = Door("wooden_door", "Statue Room")
         objects.append((door3, Coord(6,70)))
@@ -101,7 +111,7 @@ class ExampleHouse(Map):
         #objects.append((door4, Coord(70,57)))
         objects.append((door4, Coord(34, 33)))
         
-        #objects.append((Gladiator(), Coord(70,57)))
+        objects.append((Gladiator(), Coord(70,57)))
 
        
 
