@@ -57,7 +57,67 @@ class Defense(ABC):
 
 
 
+class maze_player(Defense, Subject, RecipientInterface):
+    def __init__(self,defense : int, attack_value: int,) -> None:
+        super().__init__()
+        self.__init_defense: int = defense
+        self.__defense_value: int  = defense
+        self.__attack_value = attack_value 
+        self.__armor_set: Armor_Set = Armor_Set()
+        
 
+    def get_defense_value(self)->int:
+        total_defence_value = self.__defense_value
+        total_defence_value += self.__armor_set.get_defense_value()
+        return total_defence_value
+    
+    
+    def get_attack_value(self) -> int:
+        total_attack_value = self.__attack_value
+        total_attack_value += self.__armor_set.get_attack_value()
+        return total_attack_value
+
+    def add_potion(self, potion: "Potion") -> None:
+        self.__armor_set.add_potion
+
+    def decrease_defense(self , attack:int)->int:
+        """first attack is applied on armor set then 
+            if still some attack damage is left then it is applied on player"""
+        
+        """defense value is not updated because when the enemy attack player 
+            the defense value can be subtracted from each armor individually 
+            and if defense value of one armor is less than it can changed with an armor of same type"""
+        
+        attack = self.__armor_set.decrease_defense(attack)
+        if attack < self.__defense_value:
+            self.defense = self.defense - attack
+            return 0
+
+        self.__defense_value = 0
+        return 1
+    
+    def check_armor_player(self, armor : "Armor")->Optional[Defense]:
+        """return None if armor added
+            return old armor if armor is changes
+            return new armor if armor is not added"""        
+        return self.__armor_set.add_armor(armor)
+    
+
+    def check_potion_player(self, potion: "Potion"):
+        """return None if potion added
+            return new potion if potion is not added"""
+        return self.__armor_set.add_potion(potion)
+    
+    def heal(self, heal_amt: int) -> int:
+        """Returns player defense after healing.
+        """
+        self.__defense += heal_amt
+        if self.__init_defense < self.__defense:
+            self.__defense = self.__init_defense
+        return self.__defense
+    
+
+    
 
 
 
@@ -72,7 +132,6 @@ class Armor(Defense, MapObject):
         self.__defense_value:int = defense_value
         self.__attack_value:int = attack_value
         self.__defense_type:Defense_type = defense_type
-        self.__maze:"ExampleHouse" = maze
         self.__player:"maze_player" = player
     
     def __str__(self)->str:
@@ -91,18 +150,18 @@ class Armor(Defense, MapObject):
         """if armor added then update attack value of player and return pick text
             if armor not added put the the armor back on grid and return not pick text
             if armor changed then put the old armor back on grid,update attack value of player and return change text"""
-        self.__maze.remove_from_grid(self , self._position)
+        player.get_current_room().remove_from_grid(self , self._position)
         armor = self.__player.check_armor_player(self)
         if armor is None:
             pick_text : str ='You picked up the '+ self.get_image_name() +'!\n Defense increased by: ' + str(self.__defense_value) +'!\n Attack increased by: ' + str(self.__attack_value)+'!'
             return [DialogueMessage(self, player, pick_text,self.get_image_name())]
         elif armor == self :
-            self.__maze.add_to_grid(self,player.get_current_position())
+            player.get_current_room().add_to_grid(self,player.get_current_position())
             not_pick_text : str = 'current ' + self.get_image_name() + ' has more defense!'
             return [DialogueMessage(self, player, not_pick_text,self.get_image_name())]
         else:
             if(isinstance(armor,(Armor,Potion))): 
-                self.__maze.add_to_grid(armor,player.get_current_position())
+                player.get_current_room().add_to_grid(armor,player.get_current_position())
                 defense_changed: int = self.__defense_value - armor.__defense_value
                 attack_changed:int = self.__attack_value - armor.__attack_value
                 if defense_changed>=0 and attack_changed>=0:
@@ -200,10 +259,10 @@ class Potion(Defense, MapObject):
         """if potion not added put the the potion back on grid and return pick text
             if potion added then update attack value of player,update the fields of potion and return not pick text"""
 
-        self.__maze.remove_from_grid(self , self._position)
+        player.get_current_room().remove_from_grid(self , self._position)
         potion = self.__player.check_potion_player(self)
         if  potion is not None:
-            self.__maze.add_to_grid(self,self.get_position())
+            player.get_current_room().add_to_grid(self,self.get_position())
             not_pick_text : str = 'Cannot pick up the potion! No armor to put potion on!'
             return [DialogueMessage(self, player, not_pick_text,self.get_image_name())]
         
@@ -327,69 +386,19 @@ class Armor_Set(Defense):
         self.__list_armors.append(potion)
     
         return None
-
-
-
-class maze_player(Defense, Subject, RecipientInterface):
-    def __init__(self,defense : int, attack_value: int,) -> None:
-        super().__init__()
-        self.__init_defense: int = defense
-        self.__defense_value: int  = defense
-        self.__attack_value = attack_value 
-        self.__armor_set: Armor_Set = Armor_Set()
-        self.__maze:"ExampleHouse"
-
-    def get_defense_value(self)->int:
-        total_defence_value = self.__defense_value
-        total_defence_value += self.__armor_set.get_defense_value()
-        return total_defence_value
     
-    def set_maze(self,maze:"ExampleHouse")->None:
-        self.__maze= maze
+player = maze_player(10,10)    
 
-    def get_maze(self):
-        return self.__maze
+
+
+# class Entering_tile(MapObject):
+#     def __init__(self, image_name: str, passable: bool, z_index: int = 0) -> None:
+#         super().__init__(image_name, passable, z_index)
     
-    def get_attack_value(self) -> int:
-        total_attack_value = self.__attack_value
-        total_attack_value += self.__armor_set.get_attack_value()
-        return total_attack_value
+   
 
-    def add_potion(self, potion: Potion) -> None:
-        self.__armor_set.add_potion
-
-    def decrease_defense(self , attack:int)->int:
-        """first attack is applied on armor set then 
-            if still some attack damage is left then it is applied on player"""
-        
-        """defense value is not updated because when the enemy attack player 
-            the defense value can be subtracted from each armor individually 
-            and if defense value of one armor is less than it can changed with an armor of same type"""
-        
-        attack = self.__armor_set.decrease_defense(attack)
-        if attack < self.__defense_value:
-            self.defense = self.defense - attack
-            return 0
-
-        self.__defense_value = 0
-        return 1
-    
-    def check_armor_player(self, armor : Armor)->Optional[Defense]:
-        """return None if armor added
-            return old armor if armor is changes
-            return new armor if armor is not added"""        
-        return self.__armor_set.add_armor(armor)
-    
-
-    def check_potion_player(self, potion: 'Potion'):
-        """return None if potion added
-            return new potion if potion is not added"""
-        return self.__armor_set.add_potion(potion)
-    
-    def heal(self, heal_amt: int) -> int:
-        """Returns player defense after healing.
-        """
-        self.__defense += heal_amt
-        if self.__init_defense < self.__defense:
-            self.__defense = self.__init_defense
-        return self.__defense
+#     def player_entered(self, player:"HumanPlayer") -> list[Message]:
+#         # if player.get_state("maze_player") is None:
+#         player.set_state("maze_player",maze_player(5,5))
+#         return [DialogueMessage(self, player, "Welcome to The Maze!", self.get_name())]
+#         # return []

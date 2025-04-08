@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from tiles.base import MapObject
     from tiles.map_objects import *
 
-player = maze_player(5,5)
+
 
 class ExampleHouse(Map):
     MAIN_ENTRANCE = True
@@ -55,11 +55,16 @@ class ExampleHouse(Map):
         # creates maze base with walls
         self.__create_maze_base(objects)
         # add a door
-        door = Door('int_entrance', linked_room="Trottier Town", is_main_entrance=True)
-        
+        door = Door('int_entrance', linked_room="Trottier Town")
         objects.append((door, Coord(72,63)))
+
+         # entering tile
+        # entering_tile = Entering_tile('Gold Boots',True,0)
+        # objects.append((entering_tile, Coord(71, 63)))
+
+        self.add_player(Gladiator(),Coord(70,62))
         
-        player.set_maze(self)
+        
         Gold_chest_plate = Chest_Plate(20,20,player,self,"Gold Chest Plate")
         objects.append((Gold_chest_plate, Coord(60,63)))
         Gold_Helmet = Helmet(20,20,player,self,"Gold Helmet")
@@ -112,6 +117,8 @@ class ExampleHouse(Map):
 
         
         #objects.append((Gladiator(), Coord(70,57)))
+
+       
 
         return objects
     

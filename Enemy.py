@@ -1,7 +1,5 @@
 from typing import List, TYPE_CHECKING, Literal
 
-
-from .Maze import player
 from .Defense import *
 from .imports import * 
 if TYPE_CHECKING:
@@ -20,9 +18,14 @@ class Enemy(NPC, CharacterMapObject):
         self.__defense = defense
         self.__maze_player = player
     
+    def get_maze_player(self):
+        return self.__maze_player
+    
+
     def get_defense_value(self)->int:
         return self.__defense
     
+
     def get_attack_damage(self) -> int:
         return self.__attack_damage
     
@@ -39,32 +42,42 @@ class Enemy(NPC, CharacterMapObject):
             self.__defense -= attack
             return 0  # No remaining damage
 
-    def player_moved(self, player: "HumanPlayer") -> List[Message]:
-        """Handle the event of the player moving. If the player is within a certain distance, the enemy attacks."""
-        messages: List[Message] = super().player_moved(player)  # Call the parent class's method
+    # def player_moved(self, player: "HumanPlayer") -> List[Message]:
+    #     """Handle the event of the player moving. If the player is within a certain distance, the enemy attacks."""
+    #     messages: List[Message] = super().player_moved(player)  # Call the parent class's method
 
-        if type(player) != HumanPlayer:
-            return []
+    #     if type(player) != HumanPlayer:
+    #         return []
 
-        dist = self._current_position.distance(player.get_current_position())
-        if dist <= self._staring_distance:
+    #     dist = self._current_position.distance(player.get_current_position())
+    #     if dist <= self.__staring_distance:
 
-            attack_messages = self.attack()
-            messages.extend(attack_messages)
+    #         attack_messages = self.attack()
+    #         messages.extend(attack_messages)
 
-        return messages 
+    #     return messages 
 
-    def attack(self):
-        self.__maze_player.decrease_defense(self.__attack_damage)
-        return [DialogueMessage(self, player, f"{self.get_name()} attacks you for {self.__attack_damage} damage!", self.get_image())]
+    def attack(self)->int:
+        return self.__maze_player.decrease_defense(self.__attack_damage)
+        # return [DialogueMessage(self, player, f"{self.get_name()} attacks you for {self.__attack_damage} damage!", self.get_image())]
     
     def is_defeated(self) -> bool:
         return self.__defense <= 0
     
 
     def player_interacted(self, player: "HumanPlayer") -> List[Message]:
-        self.decrease_defense(self.__attack_damage)
-        maze = self.__maze_player.get_maze()
+        self.decrease_defense(self.__maze_player.get_attack_value())
+      
+        if self.__defense == 0:
+            # return [DialogueMessage(self, player, f"{self.get_name()} attacks you for {self.__attack_damage} damage!", self.get_image())]
+            player.get_current_room().remove_from_grid(self,self.get_current_position())
+            return [DialogueMessage(self, player,self.get_name() + "died!",self.get_image_name())]
+        
+        if self.attack() > 0:
+            player.get_current_room().remove_player(player)
+            # player.change_room("Trottier Town")
+            return [DialogueMessage(self, player,player.get_name() + "died!",self.get_image_name())]
+
         return [DialogueMessage(self, player,self.get_name() + "received damage! \nremaining Health:"+str(self.__defense),self.get_image_name())] 
        
 class Minotaur(Enemy):
@@ -121,12 +134,10 @@ class Gladiator(Enemy):
             staring_distance=staring_distance,
             bg_music=bg_music
         )
-        self.__aggro_range = 5
-        self.__attack_cooldown = 0
-        self.__target = None
+        # self.__aggro_range = 5
+        # self.__attack_cooldown = 0
+        # self.__target = None
     
-    def get_attack_damage(self) -> int:
-        return super().get_attack_damage()
 
     # def update(self) -> list[Message]:
     #     messages = []
@@ -139,21 +150,26 @@ class Gladiator(Enemy):
     #     if self.__target:
     #         messages.extend(self.__move_toward_target())
     #         if self.__can_attack():
-    #             messages.extend(self.attack())
+    #             maze_player = self.get_maze_player()
+    #             maze = self.__target.get_current_room()
+    #             remaing_health = maze_player.decrease_defense(self.get_attack_damage())
+    #             if remaing_health>0:
+    #                 maze.remove_player(self.__target)
+    #             return [DialogueMessage(self, self.__target, f"{self.get_name()} attacks you  {self.__attack_damage} damage!", self.get_image())]
                 
     #     return messages
 
     # def __find_nearest_player(self) -> Optional[HumanPlayer]:
     #     current_room = self.get_current_room()
-    #     if not isinstance(current_room, Room):
-    #         return None
+    #     # if not isinstance(current_room, Room):
+    #     #     return None
         
     #     nearest = None
     #     min_dist = float('inf')
     #     my_pos = self.get_position()
 
     #     for player in current_room.get_human_players():
-    #         dist = player.get_position().distance_to(my_pos)
+    #         dist = player.get_position().distance(my_pos)
     #         if dist < self.__aggro_range and dist < min_dist:
     #             nearest = player
     #             min_dist = dist
@@ -171,7 +187,7 @@ class Gladiator(Enemy):
     #     # Try to move in calculated direction
     #     new_pos = my_pos + direction
     #     if self.__can_move_to(new_pos):
-    #         self.get_current_room().move_to(self, new_pos)
+    #         self.get_current_room().move_object(self, new_pos)
     #         return [ServerMessage(None, f"The gladiator moves {direction.name}!")]
     #     return []
     
@@ -190,4 +206,4 @@ class Gladiator(Enemy):
             
     #     return self.get_position().distance_to(
     #         self.__target.get_position()
-        # ) <= 1  # Adjacent
+    #     ) <= 1  # Adjacent
