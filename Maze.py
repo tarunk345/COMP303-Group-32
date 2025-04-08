@@ -51,7 +51,7 @@ class ExampleHouse(Map):
         # creates maze base with walls
         self.__create_maze_base(objects)
         # add a door
-        door = Door('int_entrance', linked_room="Trottier Town")
+        door = Door('int_entrance', linked_room="Trottier Town", is_main_entrance=True)
         objects.append((door, Coord(72,63)))
         player.set_maze(self)
 

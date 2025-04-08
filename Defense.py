@@ -393,7 +393,7 @@ class Armor_Set(Defense):
     
         return None
     
-player = maze_player(11,11)    
+player = maze_player(11,5)    
 
 
 
