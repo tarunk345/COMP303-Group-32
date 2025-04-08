@@ -71,17 +71,17 @@ class ExampleHouse(Map):
 
         Silver_chest_plate = Chest_Plate(10,10,player,self,"Silver Chest Plate")
         objects.append((Silver_chest_plate, Coord(62,63)))
-        Silver_Helmet = Helmet(5,5,player,self,"Silver Helmet")
+        Silver_Helmet = Helmet(10,10,player,self,"Silver Helmet")
         objects.append((Silver_Helmet, Coord(60,15)))
-        Silver_Boots = Boots(5,5,player,self,"Silver Boots")
+        Silver_Boots = Boots(10,10,player,self,"Silver Boots")
         objects.append((Silver_Boots, Coord(20,20)))
 
 
-        Bronze_chest_plate = Chest_Plate(5,5,player,self,"Bronze Chest Plate")
+        Bronze_chest_plate = Chest_Plate(2,2,player,self,"Bronze Chest Plate")
         objects.append((Bronze_chest_plate, Coord(30,30)))
-        Bronze_Helmet = Helmet(5,5,player,self,"Bronze Helmet")
+        Bronze_Helmet = Helmet(2,2,player,self,"Bronze Helmet")
         objects.append((Bronze_Helmet, Coord(10,63)))
-        Bronze_Boots = Boots(5,5,player,self,"Bronze Boots")
+        Bronze_Boots = Boots(2,2,player,self,"Bronze Boots")
         objects.append((Bronze_Boots, Coord(70,50)))
 
         Iron_chest_plate = Chest_Plate(5,5,player,self,"Iron Chest Plate")
@@ -109,11 +109,15 @@ class ExampleHouse(Map):
         objects.append((door4, Coord(34, 33)))
 
         door5 = Door("golden_door", "Final Boss Room")
-        objects.append((door5, Coord(70,57)))
-        #objects.append((door5, Coord(0,23)))
+        #objects.append((door5, Coord(70,57)))
+        objects.append((door5, Coord(0,23)))
 
         
-        #objects.append((Gladiator(), Coord(70,57)))
+        objects.append((Gladiator(), Coord(70,57)))
+        objects.append((Gladiator(), Coord(67, 57)))
+        objects.append((Gladiator(), Coord(67,61)))
+        objects.append((Gladiator(), Coord(59,40)))
+        objects.append((Gladiator(), Coord(46,7)))
 
        
 
