@@ -109,8 +109,8 @@ class ExampleHouse(Map):
         objects.append((door4, Coord(34, 33)))
 
         door5 = Door("golden_door", "Final Boss Room")
-        objects.append((door5, Coord(70,57)))
-        #objects.append((door5, Coord(0,23)))
+        # objects.append((door5, Coord(70,57)))
+        objects.append((door5, Coord(0,23)))
 
         
         objects.append((Gladiator(), Coord(70,57)))
