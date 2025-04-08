@@ -64,7 +64,13 @@ class maze_player(Defense, Subject, RecipientInterface):
         self.__defense_value: int  = defense
         self.__attack_value = attack_value 
         self.__armor_set: Armor_Set = Armor_Set()
-        
+        self.__maze:ExampleHouse 
+
+    def set_maze(self,maze:"ExampleHouse"):
+        self.__maze = maze
+
+    def get_maze(self):
+        return self.__maze
 
     def get_defense_value(self)->int:
         total_defence_value = self.__defense_value
@@ -387,7 +393,7 @@ class Armor_Set(Defense):
     
         return None
     
-player = maze_player(10,10)    
+player = maze_player(2,2)    
 
 
 

@@ -1,6 +1,5 @@
 from typing import TYPE_CHECKING
 from PIL import Image
-
 from .imports import * 
 from .maze_objects import *
 from .Defense import *
@@ -25,9 +24,6 @@ class ExampleHouse(Map):
             entry_point=Coord(72,63),
             background_tile_image='sandstone3',
         )
-        player = maze_player(5,5)
-        player.set_maze(self)
-
         self.__gladiators : list[Gladiator] = []
 
     def player_entered(self, player: "HumanPlayer") -> list[Message]:
@@ -57,12 +53,13 @@ class ExampleHouse(Map):
         # add a door
         door = Door('int_entrance', linked_room="Trottier Town")
         objects.append((door, Coord(72,63)))
+        player.set_maze(self)
 
          # entering tile
         # entering_tile = Entering_tile('Gold Boots',True,0)
         # objects.append((entering_tile, Coord(71, 63)))
 
-        self.add_player(Gladiator(),Coord(70,62))
+        # self.add_player(Gladiator(),Coord(50,62))
         
         
         Gold_chest_plate = Chest_Plate(20,20,player,self,"Gold Chest Plate")

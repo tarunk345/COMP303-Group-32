@@ -74,8 +74,10 @@ class Enemy(NPC, CharacterMapObject):
             return [DialogueMessage(self, player,self.get_name() + "died!",self.get_image_name())]
         
         if self.attack() > 0:
-            player.get_current_room().remove_player(player)
             # player.change_room("Trottier Town")
+            # player.update_position(,self.__maze_player.get_maze())
+            player.change_room(self.__maze_player.get_maze())
+            player.move_to(Coord(70,62))
             return [DialogueMessage(self, player,player.get_name() + "died!",self.get_image_name())]
 
         return [DialogueMessage(self, player,self.get_name() + "received damage! \nremaining Health:"+str(self.__defense),self.get_image_name())] 
@@ -118,7 +120,7 @@ class Gladiator(Enemy):
         name: str = "Gladiator",
         image: str = "gladiator",
         encounter_text: str = "a Gladiator appears before you!",
-        attack_damage: int = 5,
+        attack_damage: int = 10,
         defense: int = 10,
         facing_direction: Literal['up', 'down', 'left', 'right'] = 'down',
         staring_distance: int = 1,

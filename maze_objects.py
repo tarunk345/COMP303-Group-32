@@ -149,7 +149,7 @@ class SaunaRoom(Room):
     def get_objects(self) -> list[tuple[MapObject, Coord]]:
         objects: list[tuple[MapObject,Coord]] = []
         door = Door("wooden_door", "Example House")
-        objects.append((self._entrance_door,Coord(18,15)))
+        objects.append((door,Coord(18,15)))
 
         objects.append((HotTub(),Coord(3,3)))
         objects.append((HotTub(),Coord(3,10)))
@@ -173,7 +173,7 @@ class StatueRoom(Room):
         
     def __setup(self) -> None:
         if (self._observers.__len__ == 0):
-            self.registerObserver(GladiatorSpawner(room=self, center=Coord(7,5)))
+            self.attach(GladiatorSpawner(room=self, center=Coord(7,5)))
             
     def player_entered(self, player: "HumanPlayer") -> list[Message]:
         return [ServerMessage(player, f"You have entered the Room of Statues.")]
@@ -181,13 +181,8 @@ class StatueRoom(Room):
     def get_objects(self) -> list[tuple[MapObject, Coord]]:
         objects : list[tuple[MapObject,Coord]] = []
 
-<<<<<<< HEAD
-        door = Door("wooden_door", "Example House",True)
-        objects.append((self._entrance_door,Coord(4,17)))
-=======
         door = Door("wooden_door", "Example House")
         objects.append((door,Coord(4,17)))
->>>>>>> 572cf5d556bc3bab9e42a3a53ec8baf4bd053b56
 
         objects.append((Statue(description="Emperor Nero", image_name="statue2"), Coord(1, 14)))
         objects.append((Statue(description="Octavius", image_name="statue3"), Coord(1, 10)))
@@ -203,12 +198,12 @@ class WineCellar(Room):
         
     def __setup(self) -> None:
         if (self._observers.__len__ == 0):
-            self.registerObserver(GladiatorSpawner(room=self, center=Coord(7,5)))
+            self.attach(GladiatorSpawner(room=self, center=Coord(7,5)))
 
     def update(self):
         messages = []
         if self._observers.count == 0:
-             self.registerObserver(GladiatorSpawner(Coord(2,4),self))
+             self.attach(GladiatorSpawner(Coord(2,4),self))
         return messages
         
 
@@ -223,7 +218,7 @@ class WineCellar(Room):
         objects: list[tuple[MapObject, Coord]] = []
         
         door = Door("wooden_door", "Example House")
-        objects.append((self._entrance_door,Coord(2,0)))
+        objects.append((door,Coord(2,0)))
 
         objects.append((Barrel(), Coord(0,0)))
         objects.append((Barrel(), Coord(0,1)))
@@ -255,7 +250,7 @@ class ArrowStand(MapObject):
     def __init__(self, image_name: str = "arrowstand", passable: bool = False, z_index: int = 0) -> None:
         super().__init__(image_name, passable, z_index)
     
-    def player_interacted(self, player: maze_player) -> list[Message]:
+    def player_interacted(self, player: "HumanPlayer") -> list[Message]:
         return [DialogueMessage(self, player, f"Arrow Stand: Coming Soon!", self.get_image_name())]
 
 class Target(MapObject):
