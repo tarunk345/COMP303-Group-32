@@ -121,8 +121,10 @@ class ExampleHouse(Map):
 
 
         objects.append((Attack_potion(2, player=player, maze=self, image_name='attackpotion'), Coord(71,56)))
-        objects.append((Attack_potion(3, player=player, maze=self, image_name='attackpotion'), Coord(70,49)))
-        objects.append((Defense_potion(2, player=player, maze=self, image_name='defensepotion'), Coord(69,49)))
+        objects.append((Attack_potion(3, player=player, maze=self, image_name='attackpotion'), Coord(69,48)))
+        objects.append((Defense_potion(2, player=player, maze=self, image_name='defensepotion'), Coord(69,49)))        
+        objects.append((Defense_potion(2, player=player, maze=self, image_name='defensepotion'), Coord(60,7)))
+
        
 
         return objects

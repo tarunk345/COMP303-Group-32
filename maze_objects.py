@@ -255,6 +255,7 @@ class WineCellar(Room):
         objects.append((Barrel(),Coord(4,7)))
         objects.append((Barrel(),Coord(4,8)))
 
+        objects.append((Defense_potion(2, player=player, maze=self, image_name='defensepotion'), Coord(3,8)))
 
         return objects
 
