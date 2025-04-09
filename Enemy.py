@@ -1,5 +1,5 @@
 from typing import List, TYPE_CHECKING, Literal
-
+import random
 from .Defense import *
 from .imports import * 
 if TYPE_CHECKING:
@@ -16,7 +16,7 @@ class Enemy(NPC, CharacterMapObject):
         super().__init__(name=name,image=image,encounter_text=encounter_text,facing_direction=facing_direction,staring_distance=staring_distance,bg_music=bg_music)
         self.__attack_damage = attack_damage
         self.__defense = defense
-        self.__maze_player = player
+        self.__maze_player = Maze_Player
     
     def get_maze_player(self):
         return self.__maze_player
@@ -64,6 +64,13 @@ class Enemy(NPC, CharacterMapObject):
     def is_defeated(self) -> bool:
         return self.__defense <= 0
     
+    def drop_armor(self, player: "HumanPlayer",coord:Coord)->"Armor":
+        armor = random.choice(list_Defense)
+        armor_copy = armor.copy()
+        player.get_current_room().add_to_grid(armor_copy,coord)
+        return armor_copy
+        
+    
 
     def player_interacted(self, player: "HumanPlayer") -> List[Message]:
         self.decrease_defense(self.__maze_player.get_attack_value())
@@ -71,7 +78,8 @@ class Enemy(NPC, CharacterMapObject):
         if self.__defense == 0:
             # return [DialogueMessage(self, player, f"{self.get_name()} attacks you for {self.__attack_damage} damage!", self.get_image())]
             player.get_current_room().remove_from_grid(self,self.get_current_position())
-            return [DialogueMessage(self, player,self.get_name() + " died!"+"\n"+player.get_name()+" remaining Health:"+str(self.get_maze_player().get_defense_value()),self.get_image_name())]
+            armor_drop = self.drop_armor(player,player.get_current_position())
+            return [DialogueMessage(self, player,self.get_name() + " died!"+"\n"+str(armor_drop)+" dropped!\n"+player.get_name()+" remaining Health:"+str(self.get_maze_player().get_defense_value()),self.get_image_name())]
         
         if self.attack() > 0:
             # player.change_room("Trottier Town")

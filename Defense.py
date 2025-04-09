@@ -64,7 +64,7 @@ class maze_player(Defense, Subject, RecipientInterface):
         self.__defense_value: int  = defense
         self.__attack_value = attack_value 
         self.__armor_set: Armor_Set = Armor_Set()
-        self.__maze:ExampleHouse 
+        self.__maze:"ExampleHouse" 
 
     def set_maze(self,maze:"ExampleHouse"):
         self.__maze = maze
@@ -133,7 +133,7 @@ class maze_player(Defense, Subject, RecipientInterface):
 class Armor(Defense, MapObject):
     @abstractmethod
     def __init__(self, defense_value:int, attack_value:int,defense_type:Defense_type,player:"maze_player", 
-                 maze: "ExampleHouse", image_name: str, passable: bool = True, z_index: int = 0) -> None:
+                 image_name: str, passable: bool = True, z_index: int = 0) -> None:
         super().__init__(image_name, passable, z_index)
         self.__defense_value:int = defense_value
         self.__attack_value:int = attack_value
@@ -142,6 +142,13 @@ class Armor(Defense, MapObject):
     
     def __str__(self)->str:
         return self.get_image_name()
+    
+    @abstractmethod
+    def copy(self)-> "Armor":
+        pass
+
+    def get_player(self):
+        return self.__player
     
     def get_defense_value(self) -> int:
         return self.__defense_value
@@ -191,18 +198,27 @@ class Armor(Defense, MapObject):
 
 
 
-class Pants(Armor):
-    def __init__(self, defense_value: int, attack_value: int, player: "maze_player", maze: "ExampleHouse", image_name: str) -> None:
-        super().__init__(defense_value, attack_value, Defense_type.PANTS, player,maze, image_name)
 class Chest_Plate(Armor):
-    def __init__(self, defense_value: int, attack_value: int, player: "maze_player", maze: "ExampleHouse", image_name: str) -> None:
-        super().__init__(defense_value, attack_value, Defense_type.CHEST_PLATE, player,maze, image_name)
+    def __init__(self, defense_value: int, attack_value: int, player: "maze_player", image_name: str) -> None:
+        super().__init__(defense_value, attack_value, Defense_type.CHEST_PLATE, player, image_name)
+    def copy(self):
+        return Chest_Plate(self.get_defense_value(),self.get_attack_value(),self.get_player(),self.get_image_name())
+        
+
+
 class Helmet(Armor):
-    def __init__(self, defense_value: int, attack_value: int, player: "maze_player", maze: "ExampleHouse", image_name: str) -> None:
-        super().__init__(defense_value, attack_value, Defense_type.HELMET, player,maze, image_name)
+    def __init__(self, defense_value: int, attack_value: int, player: "maze_player", image_name: str) -> None:
+        super().__init__(defense_value, attack_value, Defense_type.HELMET, player, image_name)
+
+    def copy(self):
+        return Helmet(self.get_defense_value(),self.get_attack_value(),self.get_player(),self.get_image_name())
+    
 class Boots(Armor):
-    def __init__(self, defense_value: int, attack_value: int, player: "maze_player", maze: "ExampleHouse", image_name: str) -> None:
-        super().__init__(defense_value, attack_value, Defense_type.BOOTS, player,maze, image_name)
+    def __init__(self, defense_value: int, attack_value: int, player: "maze_player", image_name: str) -> None:
+        super().__init__(defense_value, attack_value, Defense_type.BOOTS, player, image_name)
+
+    def copy(self):
+        return Boots(self.get_defense_value(),self.get_attack_value(),self.get_player(),self.get_image_name())
 
 
 
@@ -213,15 +229,22 @@ class Boots(Armor):
 class Potion(Defense, MapObject):
     @abstractmethod
     def __init__(self,multiplier:int, defense_type:Defense_type,player:"maze_player",  
-                maze: "ExampleHouse", image_name: str, passable: bool = True, z_index: int = 0) -> None:
+                 image_name: str, passable: bool = True, z_index: int = 0) -> None:
         super().__init__(image_name, passable, z_index)
         self.__multiplier:int = multiplier
         self.__defense_type:Defense_type = defense_type
         self.__armor:Defense
         self.__defense_value:int
         self.__attack_value:int
-        self.__maze:"ExampleHouse" = maze
         self.__player:"maze_player" = player
+
+
+    @abstractmethod
+    def copy(self):
+        pass
+
+    def get_player(self):
+        return self.__player
 
 
     def get_defense_value(self) -> int:
@@ -279,8 +302,11 @@ class Potion(Defense, MapObject):
     
 class Defense_potion(Potion):
 
-    def __init__(self,multiplier: int, player: "maze_player", maze: "ExampleHouse", image_name: str) -> None:
-        super().__init__(multiplier, Defense_type.DEFENSE_POTION, player, maze, image_name)
+    def __init__(self,multiplier: int, player: "maze_player",  image_name: str) -> None:
+        super().__init__(multiplier, Defense_type.DEFENSE_POTION, player,image_name)
+
+    def copy(self):
+        return Defense_potion(self.get_multiplier(),self.get_player(),self.get_image_name())
     
          
     def set_fields(self):
@@ -295,14 +321,17 @@ class Defense_potion(Potion):
         armor = self.get_armor()
         image_name = self.get_image_name()
         defense_increase = (self.get_multiplier()*armor.get_defense_value()) - armor.get_defense_value()
-        pick_text = 'You picked up the '+ self.get_image_name() +'! It is applied to ' + str(armor)+ '.\nDefense increased by ' + str(defense_increase)+'!' 
+        pick_text = 'You picked up the '+ self.get_image_name() +'!\nIt is applied to ' + str(armor)+ '.\nDefense increased by ' + str(defense_increase)+'!' 
         self.set_fields()
         return [DialogueMessage(self, player, pick_text, image_name)]
 
 class Attack_potion(Potion):
 
-    def __init__(self, multiplier: int, player: "maze_player", maze: "ExampleHouse", image_name: str) -> None:
-        super().__init__(multiplier, Defense_type.ATTACK_POTION, player, maze, image_name)
+    def __init__(self, multiplier: int, player: "maze_player",  image_name: str) -> None:
+        super().__init__(multiplier, Defense_type.ATTACK_POTION, player,image_name)
+
+    def copy(self):
+        return Attack_potion(self.get_multiplier(),self.get_player(),self.get_image_name())
 
     def get_attack_value(self) -> int:
         return self.get_multiplier() * self.get_armor().get_attack_value()
@@ -315,7 +344,7 @@ class Attack_potion(Potion):
         armor = self.get_armor()
         image_name = self.get_image_name()
         attack_increase = (self.get_multiplier()*armor.get_attack_value()) - armor.get_attack_value()
-        pick_text = 'You picked up the '+ self.get_image_name() +'! It is applied to ' + str(armor)+ '.\nAttack increased by ' + str(attack_increase)+'!'
+        pick_text = 'You picked up the '+ self.get_image_name() +'!\nIt is applied to ' + str(armor)+ '.\nAttack increased by ' + str(attack_increase)+'!'
         self.set_fields() 
         return [DialogueMessage(self, player, pick_text, image_name)]
     
@@ -398,7 +427,55 @@ class Armor_Set(Defense):
     
         return potion
     
-player = maze_player(11,5)    
+
+
+
+    
+Maze_Player = maze_player(11,5)    
+Gold_chest_plate = Chest_Plate(20,20,Maze_Player,"Gold Chest Plate")
+Gold_Helmet = Helmet(20,20,Maze_Player,"Gold Helmet")        
+Gold_Boots = Boots(20,20,Maze_Player,"Gold Boots")        
+Silver_chest_plate = Chest_Plate(10,10,Maze_Player,"Silver Chest Plate")        
+Silver_Helmet = Helmet(10,10,Maze_Player,"Silver Helmet")
+Silver_Boots = Boots(10,10,Maze_Player,"Silver Boots")
+Bronze_chest_plate = Chest_Plate(2,2,Maze_Player,"Bronze Chest Plate")        
+Bronze_Helmet = Helmet(2,2,Maze_Player,"Bronze Helmet")        
+Bronze_Boots = Boots(2,2,Maze_Player,"Bronze Boots")        
+Iron_chest_plate = Chest_Plate(5,5,Maze_Player,"Iron Chest Plate")
+Iron_Helmet = Helmet(5,5,Maze_Player,"Iron Helmet")
+Iron_Boots = Boots(5,5,Maze_Player,"Iron Boots")
+
+Attack_potion_1 = Attack_potion(2,Maze_Player,'Attack Potion')
+Attack_potion_2 = Attack_potion(3, Maze_Player,image_name='Attack Potion')
+Defense_potion_1 = Defense_potion(2, Maze_Player, image_name='Defense Potion')
+Defense_potion_2 = Defense_potion(2, Maze_Player, image_name='Defense Potion')
+
+
+
+list_Defense : list[Armor] = []
+list_Defense.append(Gold_chest_plate)
+list_Defense.append(Gold_Helmet)
+list_Defense.append(Gold_Boots)
+
+list_Defense.append(Silver_chest_plate)
+list_Defense.append(Silver_Helmet)
+list_Defense.append(Silver_Boots)
+
+
+list_Defense.append(Bronze_chest_plate)
+list_Defense.append(Bronze_Helmet)
+list_Defense.append(Bronze_Boots)
+
+list_Defense.append(Iron_chest_plate)
+list_Defense.append(Iron_Helmet)
+list_Defense.append(Iron_Boots)
+
+# list_Defense.append(Attack_potion_1)
+# list_Defense.append(Attack_potion_2)
+# list_Defense.append(Defense_potion_1)        
+# list_Defense.append(Defense_potion_2)
+
+
 
 
 

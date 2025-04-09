@@ -13,7 +13,6 @@ if TYPE_CHECKING:
     from tiles.map_objects import *
 
 
-
 class ExampleHouse(Map):
     MAIN_ENTRANCE = True
     def __init__(self) -> None:
@@ -53,7 +52,7 @@ class ExampleHouse(Map):
         # add a door
         door = Door('int_entrance', linked_room="Trottier Town", is_main_entrance=True)
         objects.append((door, Coord(72,63)))
-        player.set_maze(self)
+        Maze_Player.set_maze(self)
 
          # entering tile
         # entering_tile = Entering_tile('Gold Boots',True,0)
@@ -62,33 +61,22 @@ class ExampleHouse(Map):
         # self.add_player(Gladiator(),Coord(50,62))
         
         
-        Gold_chest_plate = Chest_Plate(20,20,player,self,"Gold Chest Plate")
+        
         objects.append((Gold_chest_plate, Coord(60,63)))
-        Gold_Helmet = Helmet(20,20,player,self,"Gold Helmet")
         objects.append((Gold_Helmet, Coord(50,63)))
-        Gold_Boots = Boots(20,20,player,self,"Gold Boots")
         objects.append((Gold_Boots, Coord(20,63)))
 
-        Silver_chest_plate = Chest_Plate(10,10,player,self,"Silver Chest Plate")
         objects.append((Silver_chest_plate, Coord(62,63)))
-        Silver_Helmet = Helmet(10,10,player,self,"Silver Helmet")
         objects.append((Silver_Helmet, Coord(60,15)))
-        Silver_Boots = Boots(10,10,player,self,"Silver Boots")
         objects.append((Silver_Boots, Coord(20,20)))
 
 
-        Bronze_chest_plate = Chest_Plate(2,2,player,self,"Bronze Chest Plate")
         objects.append((Bronze_chest_plate, Coord(30,30)))
-        Bronze_Helmet = Helmet(2,2,player,self,"Bronze Helmet")
         objects.append((Bronze_Helmet, Coord(10,63)))
-        Bronze_Boots = Boots(2,2,player,self,"Bronze Boots")
         objects.append((Bronze_Boots, Coord(70,50)))
 
-        Iron_chest_plate = Chest_Plate(5,5,player,self,"Iron Chest Plate")
         objects.append((Iron_chest_plate, Coord(50,50)))
-        Iron_Helmet = Helmet(5,5,player,self,"Iron Helmet")
         objects.append((Iron_Helmet, Coord(65,50)))
-        Iron_Boots = Boots(5,5,player,self,"Iron Boots")
         objects.append((Iron_Boots, Coord(35,20)))
 
         ##Doors
@@ -120,10 +108,10 @@ class ExampleHouse(Map):
         objects.append((Gladiator(), Coord(46,7)))
 
 
-        objects.append((Attack_potion(2, player=player, maze=self, image_name='attackpotion'), Coord(71,56)))
-        objects.append((Attack_potion(3, player=player, maze=self, image_name='attackpotion'), Coord(69,48)))
-        objects.append((Defense_potion(2, player=player, maze=self, image_name='defensepotion'), Coord(69,49)))        
-        objects.append((Defense_potion(2, player=player, maze=self, image_name='defensepotion'), Coord(60,7)))
+        objects.append((Attack_potion_1, Coord(71,56)))
+        objects.append((Attack_potion_2, Coord(69,48)))
+        objects.append((Defense_potion_1, Coord(69,49)))        
+        objects.append((Defense_potion_2, Coord(60,7)))
 
        
 
@@ -147,3 +135,4 @@ class ExampleHouse(Map):
                 pixel = rgb_im.getpixel((x,y))
                 if pixel == (255,255,255):
                     self.add_to_grid(Wall(),Coord(y,x))
+
