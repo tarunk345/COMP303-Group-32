@@ -6,12 +6,12 @@ from ..Defense import (
     Attack_potion
 )
 
-# Create a basic maze player with default stats
+# Create a basic maze player with the regular stats
 @pytest.fixture
 def player():
     return maze_player(defense=20, attack_value=10)
 
-# Base armor that can be reused across potion tests
+# Base armor that is used in the tests
 @pytest.fixture
 def base_armor(player):
     return Chest_Plate(defense_value=10, attack_value=5, player=player, image_name="Chest Plate")
@@ -73,7 +73,7 @@ def test_attack_potion_attack_is_multiplied(player, base_armor):
     potion.set_fields()
     assert potion.get_attack_value() == base_armor.get_attack_value() * 3
 
-# Deal damage and check reduction
+# Deal damage and also check reduction
 def test_attack_potion_damage_reduction(player, base_armor):
     potion = Attack_potion(multiplier=2, player=player, image_name="Potion")
     potion.set_armor(base_armor)
