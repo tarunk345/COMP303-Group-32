@@ -1,5 +1,5 @@
 import pytest
-from COMP303_Group_32.Defense import Armor_Set, Chest_Plate, Helmet, Boots, maze_player
+from ..Defense import Armor_Set, Chest_Plate, Helmet, Boots, maze_player
 
 # Doing this so there is an armor_set and a player each time
 @pytest.fixture

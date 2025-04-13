@@ -1,5 +1,5 @@
 import pytest
-from COMP303_Group_32.Defense import Helmet, Boots, Chest_Plate, Armor, maze_player, Defense_type, Armor_Set
+from ..Defense import Helmet, Boots, Chest_Plate, Armor, maze_player, Defense_type, Armor_Set
 
 #Will use this for all of them
 #Just sets up the player so I can attach armor
