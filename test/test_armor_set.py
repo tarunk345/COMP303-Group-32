@@ -61,7 +61,7 @@ def test_decrease_defense_overkill(setup_armor_set):
 
 # If armor exists, a potion should be applied and increase stats
 def test_add_potion_success(setup_armor_set):
-    from COMP303_Group_32.Defense import Attack_potion
+    from ..Defense import Attack_potion
     armor_set, player = setup_armor_set
     helmet = Helmet(10, 3, player, "helmet")
     potion = Attack_potion(2, player, "atk_potion")
@@ -72,7 +72,7 @@ def test_add_potion_success(setup_armor_set):
 
 # If no armor exists, the potion should not be applied
 def test_add_potion_no_armor_fails(setup_armor_set):
-    from COMP303_Group_32.Defense import Defense_potion
+    from ..Defense import Defense_potion
     armor_set, player = setup_armor_set
     potion = Defense_potion(2, player, "def_potion")
     result = armor_set.add_potion(potion)
@@ -88,7 +88,7 @@ def test_add_armor_returns_none_when_added(setup_armor_set):
 
 # Check that the potion correctly multiplies the attack value
 def test_attack_value_with_potion_multiplier(setup_armor_set):
-    from COMP303_Group_32.Defense import Attack_potion
+    from ..Defense import Attack_potion
     armor_set, player = setup_armor_set
     helmet = Helmet(10, 4, player, "helmet")
     potion = Attack_potion(2, player, "atk_potion")
