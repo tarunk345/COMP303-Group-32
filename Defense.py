@@ -2,14 +2,6 @@ from typing import TYPE_CHECKING, Optional
 from abc import ABC, abstractmethod
 from enum import Enum
 import random
-
-
-
-
-
-
-
-
 from .imports import * 
 if TYPE_CHECKING:
     from coord import Coord
@@ -170,7 +162,7 @@ class Armor(Defense, MapObject):
             return [DialogueMessage(self, player, pick_text,self.get_image_name())]
         elif armor == self :
             player.get_current_room().add_to_grid(self,player.get_current_position())
-            not_pick_text : str = 'current ' + self.get_image_name() + ' has more defense!'
+            not_pick_text : str = 'current ' + self.get_defense_type().name + ' has more defense!'
             return [DialogueMessage(self, player, not_pick_text,self.get_image_name())]
         else:
             if(isinstance(armor,(Armor,Potion))): 
@@ -469,24 +461,3 @@ list_Defense.append(Bronze_Boots)
 list_Defense.append(Iron_chest_plate)
 list_Defense.append(Iron_Helmet)
 list_Defense.append(Iron_Boots)
-
-# list_Defense.append(Attack_potion_1)
-# list_Defense.append(Attack_potion_2)
-# list_Defense.append(Defense_potion_1)        
-# list_Defense.append(Defense_potion_2)
-
-
-
-
-
-# class Entering_tile(MapObject):
-#     def __init__(self, image_name: str, passable: bool, z_index: int = 0) -> None:
-#         super().__init__(image_name, passable, z_index)
-    
-   
-
-#     def player_interacted(self, player:"HumanPlayer") -> list[Message]:
-#         # if player.get_state("maze_player") is None:
-#         player.set_state("maze_player",maze_player(5,5))
-#         return [DialogueMessage(self, player, "Welcome to The Maze!", self.get_name())]
-#         # return []

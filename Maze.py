@@ -13,6 +13,8 @@ if TYPE_CHECKING:
     from tiles.map_objects import *
 
 
+
+
 class ExampleHouse(Map):
     MAIN_ENTRANCE = True
     def __init__(self) -> None:
@@ -25,12 +27,14 @@ class ExampleHouse(Map):
         )
         self.__gladiators : list[Gladiator] = []
 
+
+
     def player_entered(self, player: "HumanPlayer") -> list[Message]:
         messages = []
         return messages
 
     def add_gladiator(self) -> None:
-        self.__gladiators.append(Gladiator())
+        self.__gladiators.append(Gladiator_Prototype.custom_copy(10,10))
 
     def update(self) -> list[Message]:
         messages = []
@@ -53,15 +57,9 @@ class ExampleHouse(Map):
         door = Door('int_entrance', linked_room="Trottier Town", is_main_entrance=True)
         objects.append((door, Coord(72,63)))
         Maze_Player.set_maze(self)
+        
+        
 
-         # entering tile
-        # entering_tile = Entering_tile('Gold Boots',True,0)
-        # objects.append((entering_tile, Coord(71, 63)))
-
-        # self.add_player(Gladiator(),Coord(50,62))
-        
-        
-        
         objects.append((Gold_chest_plate, Coord(60,63)))
         objects.append((Gold_Helmet, Coord(50,63)))
         objects.append((Gold_Boots, Coord(20,63)))
@@ -101,11 +99,11 @@ class ExampleHouse(Map):
         objects.append((door5, Coord(0,23)))
 
         
-        objects.append((Gladiator(), Coord(70,57)))
-        objects.append((Gladiator(), Coord(67, 57)))
-        objects.append((Gladiator(), Coord(67,61)))
-        objects.append((Gladiator(), Coord(59,40)))
-        objects.append((Gladiator(), Coord(46,7)))
+        objects.append((Gladiator_Prototype.custom_copy(15,12), Coord(70,57)))
+        objects.append((Gladiator_Prototype.custom_copy(13,12), Coord(67, 57)))
+        objects.append((Gladiator_Prototype.custom_copy(11,11), Coord(67,61)))
+        objects.append((Gladiator_Prototype.custom_copy(12,13), Coord(59,40)))
+        objects.append((Gladiator_Prototype.custom_copy(12,11), Coord(46,7)))
 
 
         objects.append((Attack_potion_1, Coord(71,56)))

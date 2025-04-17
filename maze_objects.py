@@ -89,7 +89,7 @@ class GladiatorSpawner(Observer):
     def _spawn_gladiators(self) -> list[Message]:
         messages =[]
         for i in range(self.enemy_count):
-            gladiator = Gladiator()
+            gladiator = Gladiator_Prototype.custom_copy(10,10)
             offset = Coord(i-self.enemy_count//2,0)
             position = self.center + offset
             try:
@@ -156,13 +156,13 @@ class SaunaRoom(Room):
         objects.append((HotTub(),Coord(10,3)))
         objects.append((HotTub(),Coord(10,10)))
 
-        objects.append((Gladiator(), Coord(8,8)))
-        objects.append((Gladiator(), Coord(8,4)))
-        objects.append((Gladiator(), Coord(8,12)))
+        objects.append((Gladiator_Prototype.custom_copy(1,12), Coord(8,8)))
+        objects.append((Gladiator_Prototype.custom_copy(5,7), Coord(8,4)))
+        objects.append((Gladiator_Prototype.custom_copy(15,10), Coord(8,12)))
 
-        objects.append((Gladiator(), Coord(15,8)))
-        objects.append((Gladiator(), Coord(15,4)))
-        objects.append((Gladiator(), Coord(15,12)))
+        objects.append((Gladiator_Prototype.custom_copy(14,12), Coord(15,8)))
+        objects.append((Gladiator_Prototype.custom_copy(13,12), Coord(15,4)))
+        objects.append((Gladiator_Prototype.custom_copy(15,13), Coord(15,12)))
 
         for x in range(0,17,2):
             objects.append((Column(), Coord(x,0)))
@@ -197,9 +197,9 @@ class StatueRoom(Room):
         objects.append((Statue("Anthony", "statue4"), Coord(1, 6)))
         objects.append((Statue("Marcus Aurelius", "statue5"), Coord(1, 2)))
 
-        objects.append((Gladiator(), Coord(2,12)))
-        objects.append((Gladiator(), Coord(2,8)))
-        objects.append((Gladiator(), Coord(2,4)))
+        objects.append((Gladiator_Prototype.custom_copy(5,15), Coord(2,12)))
+        objects.append((Gladiator_Prototype.custom_copy(7,20), Coord(2,8)))
+        objects.append((Gladiator_Prototype.custom_copy(13,12), Coord(2,4)))
 
 
         return objects
@@ -233,8 +233,8 @@ class WineCellar(Room):
         door = Door("wooden_door", "Example House")
         objects.append((door,Coord(2,0)))
 
-        objects.append((Gladiator(), Coord(1,4)))
-        objects.append((Gladiator(), Coord(2,4)))
+        objects.append((Gladiator_Prototype.custom_copy(10,10), Coord(1,4)))
+        objects.append((Gladiator_Prototype.custom_copy(10,10), Coord(2,4)))
 
         objects.append((Barrel(), Coord(0,0)))
         objects.append((Barrel(), Coord(0,1)))
@@ -324,12 +324,12 @@ class Armory(Room):
         objects.append((Target(), Coord(11,7)))
         objects.append((Target(), Coord(11,10)))
 
-        objects.append((Gladiator(), Coord(8,8)))
-        objects.append((Gladiator(), Coord(8,4)))
-        objects.append((Gladiator(), Coord(6,8)))
-        objects.append((Gladiator(), Coord(4,8)))
-        objects.append((Gladiator(), Coord(10,8)))
-        objects.append((Gladiator(), Coord(6,4)))
+        objects.append((Gladiator_Prototype.custom_copy(12,12), Coord(8,8)))
+        objects.append((Gladiator_Prototype.custom_copy(13,15), Coord(8,4)))
+        objects.append((Gladiator_Prototype.custom_copy(15,16), Coord(6,8)))
+        objects.append((Gladiator_Prototype.custom_copy(11,17), Coord(4,8)))
+        objects.append((Gladiator_Prototype.custom_copy(5,13), Coord(10,8)))
+        objects.append((Gladiator_Prototype.custom_copy(18,12), Coord(6,4)))
 
 
         
