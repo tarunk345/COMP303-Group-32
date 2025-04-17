@@ -120,12 +120,12 @@ class Gladiator(Enemy):
         self,
         name: str,
         image: str ,
-        encounter_text: str = "a Gladiator appears before you!",
-        attack_damage: int = 10,
-        defense: int = 10,
-        facing_direction: Literal['up', 'down', 'left', 'right'] = 'down',
-        staring_distance: int = 1,
-        bg_music: str = ''
+        encounter_text: str,
+        attack_damage: int,
+        defense: int,
+        facing_direction: Literal['up', 'down', 'left', 'right'],
+        staring_distance: int,
+        bg_music: str
     ):
         super().__init__(
             defense=defense,
