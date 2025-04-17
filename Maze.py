@@ -34,9 +34,13 @@ class ExampleHouse(Map):
         return messages
 
     def add_gladiator(self) -> None:
+        """adds gladiator to gladiator list."""
         self.__gladiators.append(Gladiator_Prototype.custom_copy(10,10))
 
     def update(self) -> list[Message]:
+        """checks if theres an existing player inside, and if there is it prevents the player from entering.
+            also checks if the gladiators in the list of gladiators are defeated, and if they are to remove them from the grid.
+        """
         messages = []
         playerlist : list[HumanPlayer] = self.get_human_players()
         if playerlist.__len__() >= 2:
@@ -50,6 +54,7 @@ class ExampleHouse(Map):
         return messages
         
     def get_objects(self) -> list[tuple[MapObject, Coord]]:
+        """returns maze objects."""
         objects: list[tuple[MapObject, Coord]] = []
         # creates maze base with walls
         self.__create_maze_base(objects)
@@ -98,6 +103,9 @@ class ExampleHouse(Map):
         # objects.append((door5, Coord(70,57)))
         objects.append((door5, Coord(0,23)))
 
+        signtext = "Welcome to the Maze! To pick up armor and potions, stand a block away and click space."
+        objects.append((Sign(text=signtext), Coord(70,62)))
+        objects.append((Sign(text="Remember when you fight enemies with you space bar, you also lose health! However, enemies drop goodies, so watch out :)"), Coord(70,61)))
         
         objects.append((Gladiator_Prototype.custom_copy(15,12), Coord(70,57)))
         objects.append((Gladiator_Prototype.custom_copy(13,12), Coord(67, 57)))
@@ -116,6 +124,7 @@ class ExampleHouse(Map):
         return objects
     
     def getRandomCoords(self, count : int) -> list[Coord]:
+        """returns a list of random Coords that are not already taken up by map objects."""
         coords : list[Coord] = []
         for i in range (count):
             x = random.randint(0,72)
@@ -125,6 +134,7 @@ class ExampleHouse(Map):
         return coords
 
     def __create_maze_base(self, objects):
+        """Creates the layout of the maze based on the existing image template of the maze."""
         Resource = Resources()
         image = Image.open(Resource.get_resource_path("maze_template4.png", ext_folder=True))
         rgb_im = image.convert('RGB')
@@ -132,5 +142,7 @@ class ExampleHouse(Map):
             for y in range(73):
                 pixel = rgb_im.getpixel((x,y))
                 if pixel == (255,255,255):
-                    self.add_to_grid(Wall(),Coord(y,x))
+                    coord = Coord(y,x)
+                    if coord != Coord(70,62) and coord != Coord(70,61):
+                        self.add_to_grid(Wall(),Coord(y,x))
 

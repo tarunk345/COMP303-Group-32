@@ -59,28 +59,54 @@ class maze_player(Defense, Subject, RecipientInterface):
         self.__maze:"ExampleHouse" 
 
     def set_maze(self,maze:"ExampleHouse"):
+        """sets the maze_player's maze attribute to maze
+
+            :param maze:
+        """
         self.__maze = maze
 
     def get_maze(self):
+        """
+        :returns the player's maze attribute:
+        """
         return self.__maze
 
     def get_defense_value(self)->int:
+        """
+        adds the defense values from the armor set to base defense and returns the total defense value
+        
+        :returns total defense value.:
+        """
         total_defence_value = self.__defense_value
         total_defence_value += self.__armor_set.get_defense_value()
         return total_defence_value
     
     
     def get_attack_value(self) -> int:
+        """
+        adds the attack values from the armor set to base attack value and returns the total attack value
+        
+        :returns total attack value.:
+        """
         total_attack_value = self.__attack_value
         total_attack_value += self.__armor_set.get_attack_value()
         return total_attack_value
 
     def add_potion(self, potion: "Potion") -> None:
+        """ adds a potion to the player's armor set
+
+        :param potion:
+        :returns None:
+        """
         self.__armor_set.add_potion
 
     def decrease_defense(self , attack:int)->int:
         """first attack is applied on armor set then 
-            if still some attack damage is left then it is applied on player"""
+            if still some attack damage is left then it is applied on player
+            
+            :param attack:
+            :returns 0 if attack is less than defense value, or 1 otherwise:
+            """
         
         """defense value is not updated because when the enemy attack player 
             the defense value can be subtracted from each armor individually 
@@ -95,9 +121,11 @@ class maze_player(Defense, Subject, RecipientInterface):
         return 1
     
     def check_armor_player(self, armor : "Armor")->Optional[Defense]:
-        """return None if armor added
-            return old armor if armor is changes
-            return new armor if armor is not added"""        
+        """
+        
+        :returns None if armor added:
+        :returns old armor if armor is changed:
+        :returns or new armor if armor is not added:"""        
         return self.__armor_set.add_armor(armor)
     
 
@@ -140,21 +168,29 @@ class Armor(Defense, MapObject):
         pass
 
     def get_player(self):
+        """ returns player."""
         return self.__player
     
     def get_defense_value(self) -> int:
+        """Returns defense value of armor."""
         return self.__defense_value
     
     def get_attack_value(self)->int:
+        """ returns attaack value of armor."""
         return self.__attack_value
     
     def get_defense_type(self)->Defense_type:
+        """ returns defense type."""
         return self.__defense_type
     
     def player_interacted(self, player: HumanPlayer) -> list[Message]:
         """if armor added then update attack value of player and return pick text
             if armor not added put the the armor back on grid and return not pick text
-            if armor changed then put the old armor back on grid,update attack value of player and return change text"""
+            if armor changed then put the old armor back on grid,update attack value of player and return change text
+            
+            :param player:
+            :returns list[Message]:
+            """
         player.get_current_room().remove_from_grid(self , self._position)
         armor = self.__player.check_armor_player(self)
         if armor is None:
@@ -194,6 +230,7 @@ class Chest_Plate(Armor):
     def __init__(self, defense_value: int, attack_value: int, player: "maze_player", image_name: str) -> None:
         super().__init__(defense_value, attack_value, Defense_type.CHEST_PLATE, player, image_name)
     def copy(self):
+        """returns a deep copy of the current chestplate."""
         return Chest_Plate(self.get_defense_value(),self.get_attack_value(),self.get_player(),self.get_image_name())
         
 
@@ -203,6 +240,7 @@ class Helmet(Armor):
         super().__init__(defense_value, attack_value, Defense_type.HELMET, player, image_name)
 
     def copy(self):
+        """returns a deep copy of the current Helmet."""
         return Helmet(self.get_defense_value(),self.get_attack_value(),self.get_player(),self.get_image_name())
     
 class Boots(Armor):
@@ -210,6 +248,7 @@ class Boots(Armor):
         super().__init__(defense_value, attack_value, Defense_type.BOOTS, player, image_name)
 
     def copy(self):
+        """returns a deep copy of the current Boots."""
         return Boots(self.get_defense_value(),self.get_attack_value(),self.get_player(),self.get_image_name())
 
 
@@ -236,31 +275,40 @@ class Potion(Defense, MapObject):
         pass
 
     def get_player(self):
+        """returns player."""
         return self.__player
 
 
     def get_defense_value(self) -> int:
+        """returns defense value."""
         return self.__defense_value
     
     def set_defense_value(self,defense:int):
+        """sets defense value."""
         self.__defense_value = defense
 
     def get_attack_value(self) -> int:
+        """returns attack value."""
         return self.__attack_value
     
     def get_multiplier(self):
+        """returns multiplier."""
         return self.__multiplier
     
     def get_armor(self)->Defense:
+        """returns armor that the potion is applied on."""
         return self.__armor
     
     def get_defense_type(self) -> Defense_type:
+        """returns defense type. """
         return self.__defense_type
     
     def set_armor(self, armor: Defense):
+        """sets armor that the potion will be applied to."""
         self.__armor = armor
 
     def set_fields(self):
+        """sets image name, defense type, defense value, and attack value."""
         armor = self.__armor
         if(isinstance(armor,(Armor,Potion))):
             self.set_image_name(armor.get_image_name())
@@ -269,6 +317,7 @@ class Potion(Defense, MapObject):
             self.__attack_value = armor.get_attack_value()            
 
     def decrease_defense(self, attack: int) -> int:
+        """decreases defense and returns attack."""
         if attack < self.__defense_value:
                 self.__defense_value = self.__defense_value - attack
                 return 0 
@@ -279,7 +328,11 @@ class Potion(Defense, MapObject):
 
     def player_interacted(self, player: "HumanPlayer") -> list[Message]:
         """if potion not added put the the potion back on grid and return pick text
-            if potion added then update attack value of player,update the fields of potion and return not pick text"""
+            if potion added then update attack value of player,update the fields of potion and return not pick text
+            
+            :param player:
+            :returns list[Message]:
+            """
 
         player.get_current_room().remove_from_grid(self , self._position)
         potion = self.__player.check_potion_player(self)
@@ -298,14 +351,21 @@ class Defense_potion(Potion):
         super().__init__(multiplier, Defense_type.DEFENSE_POTION, player,image_name)
 
     def copy(self):
+        """returns deep copy of the potion."""
         return Defense_potion(self.get_multiplier(),self.get_player(),self.get_image_name())
     
          
     def set_fields(self):
+        """super calls set_fields and sets the defense value to the multiplier times the armor's defense value."""
         super().set_fields()
         self.set_defense_value(self.get_multiplier()*self.get_armor().get_defense_value())
 
     def player_interacted(self, player: "HumanPlayer") -> list[Message]:
+        """returns pick up text for the potion.
+        
+        :param player:
+        :returns list[Message]:
+        """
         message = super().player_interacted(player)
         if message != []:
             return message
@@ -323,12 +383,19 @@ class Attack_potion(Potion):
         super().__init__(multiplier, Defense_type.ATTACK_POTION, player,image_name)
 
     def copy(self):
+        """returns deep copy of attack potion."""
         return Attack_potion(self.get_multiplier(),self.get_player(),self.get_image_name())
 
     def get_attack_value(self) -> int:
+        """returns multiplier times the attack value of the armor."""
         return self.get_multiplier() * self.get_armor().get_attack_value()
 
     def player_interacted(self, player: "HumanPlayer") -> list[Message]:
+        """returns pick up text for the potion. 
+        
+        :param player:
+        :returns list[Message]:
+        """
         message = super().player_interacted(player)
         if message != []:
             return message
@@ -349,6 +416,7 @@ class Armor_Set(Defense):
         
 
     def get_defense_value(self) -> int:
+        """ returns collective defense value of all armors in armor set."""
         defense = 0
         for armor in self.__list_armors:
             defense += armor.get_defense_value()
@@ -356,7 +424,7 @@ class Armor_Set(Defense):
         return defense
     
     def get_attack_value(self) -> int:
-
+        """ returns collective attack value of all armors in armor set."""
         attack = 0
         for armor in self.__list_armors:
             attack += armor.get_attack_value()
@@ -366,7 +434,7 @@ class Armor_Set(Defense):
 
 
     def decrease_defense(self,attack:int)->int:
-        """remainging attack is returned"""
+        """remaining attack is returned."""
         
         for armor in self.__list_armors:
             attack = armor.decrease_defense(attack)
@@ -381,9 +449,10 @@ class Armor_Set(Defense):
     
     
     def add_armor(self, armor : Armor)->Optional[Defense]  :
-        """return None if armor added
-            return old armor if armor is changes
-            return new armor if armor is not added"""
+        """
+        :returns None if armor added:
+        :returns old armor if armor is changes:
+        :returns new armor if armor is not added:"""
         armor_stats = armor.get_defense_value() + armor.get_attack_value()
 
         for check_armor in self.__list_armors:
@@ -401,8 +470,9 @@ class Armor_Set(Defense):
         return None
     
     def add_potion(self, potion : Potion)->Optional[Potion]  :
-        """return None if potion added
-            return new potion if potion is not added"""
+        """
+        :returns None if potion added:
+        :returns new potion if potion is not added:"""
         """potion can be applied on armors which already has potion applied to them"""
 
         if len(self.__list_armors) == 0:

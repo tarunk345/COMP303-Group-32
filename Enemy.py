@@ -19,19 +19,22 @@ class Enemy(NPC, CharacterMapObject):
         self.__maze_player = Maze_Player
     
     def get_maze_player(self):
+        """returns maze player."""
         return self.__maze_player
     
-
     def get_defense_value(self)->int:
+        """returns defense value."""
         return self.__defense
     
-
     def get_attack_damage(self) -> int:
+        """returns attack damage value."""
         return self.__attack_damage
-
-
     
     def decrease_defense(self , attack:int)->int:
+        """returns remaining damage after decreasing defense.
+        
+        :param attack:
+        """
         if attack >= self.__defense:
             remaining_damage = attack - self.__defense
             self.__defense = 0  # Defense is fully depleted
@@ -44,12 +47,23 @@ class Enemy(NPC, CharacterMapObject):
 
 
     def attack(self)->int:
+        """returns result of decrease defense called on maze player."""
         return self.__maze_player.decrease_defense(self.__attack_damage)
     
     def is_defeated(self) -> bool:
+        """returns if defense is less than 0.
+        
+        :returns bool:
+        """
         return self.__defense <= 0
     
     def drop_armor(self, player: "HumanPlayer",coord:Coord)->"Armor":
+        """picks a random armor and adds copy of the armor to the current room player is in.
+        
+        :param player:
+        :param coord:
+        :returns copy of the armor.:
+        """
         armor = random.choice(list_Defense)
         armor_copy = armor.copy()
         player.get_current_room().add_to_grid(armor_copy,coord)
@@ -58,6 +72,13 @@ class Enemy(NPC, CharacterMapObject):
     
 
     def player_interacted(self, player: "HumanPlayer") -> List[Message]:
+        """decreases damage of the enemy by player's attack value, and returns text.
+        
+        :param player:
+        :returns death message if defense equals 0.:
+        :returns player death message if attack on player kills them.:
+        :returns damage message otherwise.:
+        """
         self.decrease_defense(self.__maze_player.get_attack_value())
       
         if self.__defense == 0:
@@ -77,6 +98,10 @@ class Minotaur(Enemy):
 
     @staticmethod
     def get_instance():
+        """creates an instance of Minotaur if it doesn't already exist.
+        
+        :returns instance of the minotaur.:
+        """
         if Minotaur._instance is None:
             Minotaur._instance = Minotaur()
         return Minotaur._instance
@@ -96,6 +121,13 @@ class Minotaur(Enemy):
         )
 
     def player_interacted(self, player: "HumanPlayer") -> List[Message]:
+        """decreases damage of the enemy by player's attack value, and returns text.
+        
+        :param player:
+        :returns death message if defense equals 0.:
+        :returns player death message if attack on player kills them.:
+        :returns damage message otherwise.:
+        """
         self.decrease_defense(self.get_maze_player().get_attack_value())
       
         if self.get_defense_value() == 0:
@@ -142,6 +174,7 @@ class Gladiator(Enemy):
 
     
     def custom_copy(self,attack,defense)-> "Gladiator":
+        """returns deep copy of the gladiator based on prototype design pattern."""
         return Gladiator ("Gladiator","gladiator","a Gladiator appears before you!",attack,defense,self.get_facing_direction(),1,'')
     
     
