@@ -42,9 +42,9 @@ class ExampleHouse(Map):
             also checks if the gladiators in the list of gladiators are defeated, and if they are to remove them from the grid.
         """
         messages = []
-        playerlist : list[HumanPlayer] = self.get_human_players()
-        if playerlist.__len__() >= 2:
-            self.remove_player(playerlist[1])
+        # playerlist : list[HumanPlayer] = self.get_human_players()
+        # if playerlist.__len__() >= 2:
+        #     self.remove_player(playerlist[1])
             
         for gladiator in self.__gladiators:
             if gladiator.is_defeated():
